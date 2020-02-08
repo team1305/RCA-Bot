@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -20,6 +22,15 @@ public class Subsystem_Elevator extends Subsystem {
 
   public static CANSparkMax mtElevator = RobotMap.mtElevator;
 
+  public Subsystem_Elevator() {
+
+    
+    mtElevator.restoreFactoryDefaults();
+    mtElevator.setIdleMode(IdleMode.kCoast);
+    mtElevator.setOpenLoopRampRate(0.4);
+
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -27,13 +38,13 @@ public class Subsystem_Elevator extends Subsystem {
   }
 
 
-  public void elevatorUp() {
-    mtElevator.set(-0.5);
+  public void elevatorUp(double speed) {
+    mtElevator.set(speed);
   }
 
 
-  public void elevatorDown() {
-    mtElevator.set(0.5);
+  public void elevatorDown(double speed) {
+    mtElevator.set(-speed);
   }
 
   public void elevatorStop() {
