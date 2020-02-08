@@ -10,33 +10,34 @@ package frc.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Subsystem_Compressor_Power;
+import frc.robot.subsystems.ShooterRPM;
+import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_Drive;
 import frc.robot.subsystems.Subsystem_Elevator;
 import frc.robot.subsystems.Subsystem_Hopper;
 import frc.robot.subsystems.Subsystem_Intake;
+import frc.robot.subsystems.Subsystem_Limelight;
 import frc.robot.subsystems.Subsystem_Shooter;
-
+import frc.robot.subsystems.Subsystem_Winch;
 
 public class Robot extends TimedRobot {
 
   //declares subsystem variables
   public static Subsystem_Drive drive = new Subsystem_Drive();
   public static Subsystem_Shooter shooter = new Subsystem_Shooter();
-  public static Subsystem_Compressor_Power compressor = new Subsystem_Compressor_Power();
+  public static Subsystem_Compressor compressor = new Subsystem_Compressor();
   public static Subsystem_Elevator elevator = new Subsystem_Elevator();
   public static Subsystem_Hopper hopper = new Subsystem_Hopper();
   public static Subsystem_Intake intake = new Subsystem_Intake();
+  public static ShooterRPM shooterrpm = new ShooterRPM();
   
-  //public static Subsystem_Tower_Rotation tower = new Subsystem_Tower_Rotation();
-  //public static Subsystem_Intake intake = new Subsystem_Intake();
-  //public static Subsystem_Winch winch = new Subsystem_Winch();
-  //public static Subsystem_Tower_Lift towerLift = new Subsystem_Tower_Lift();
-  //public static Subsystem_RGBLED_CAN rgbLedController = new Subsystem_RGBLED_CAN();
+  public static Subsystem_Winch winch = new Subsystem_Winch();
+
+  public static Subsystem_Limelight limelight = new Subsystem_Limelight();
+
+  
+
   //public static Subsystem_Limelight limelight = new Subsystem_Limelight();
   public static UsbCamera camera;
   public static OI oi;
@@ -49,22 +50,15 @@ public class Robot extends TimedRobot {
     //Robot.tower.resetEncoder();
     oi = new OI();
 
-    //Displays information of robot status
-    //SmartDashboard.putBoolean("Tower Level 1", towerLift.bTowerLowerIsUp); 
-    //SmartDashboard.putBoolean("Tower Level 2", towerLift.bTowerUpperIsUp);
-    //SmartDashboard.putBoolean("Intake", intake.bWristIsDown);
-    //SmartDashboard.putBoolean("J Hook", intake.bHatchGrabbed);
-    //SmartDashboard.putBoolean("Gear", drive.bIsLow);
-    //Robot.rgbLedController.RGBledCAN();
-
     //starts camera stream if camera is available
     try {
+
       camera = CameraServer.getInstance().startAutomaticCapture();
     }
     catch(Exception ex) {
+
       System.out.println("ERROR: setting camera: " + ex.getMessage()) ;
     } 
-    
   }
 
   //This function is a loop that is always running

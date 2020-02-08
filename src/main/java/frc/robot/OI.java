@@ -9,21 +9,22 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.InternalButton;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.Command_Compressor_OFF;
 import frc.robot.commands.Command_Compressor_ON;
+
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
+import frc.robot.commands.Command_Limelight_Initiation_Line;
 import frc.robot.commands.Command_Shift_Gear;
-import frc.robot.commands.Command_Shoot;
+//import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Supply_Balls;
-import frc.robot.commands.Elevator_Down;
-import frc.robot.commands.Elevator_Up;
-import frc.robot.commands.Hopper_In;
-import frc.robot.commands.Hopper_Out;
-import frc.robot.commands.Intake_Out;
-import frc.robot.commands.Intake_Spin;
+import frc.robot.commands.Command_Winch_Down;
+import frc.robot.commands.Command_Winch_Up;
+import frc.robot.commands.Spin_Shooter_RPM;
+
+
+
 
 
 /**
@@ -69,21 +70,26 @@ public class OI {
   public OI() {
  
     // Primary Driver Stick
-    //btn1_A.whileHeld(new Elevator_Down());//xbox "A" Button 1
+    btn1_A.whileHeld(new Command_Winch_Up());//xbox "A" Button 1
 
-    //btn1_B.whileHeld(new Elevator_Up());//xbox "B" Button 2
+    btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    //btn1_X.whileHeld(new Hopper_In());//xbox "X" Button 3
+    btn1_X.whileHeld(new Spin_Shooter_RPM(1900));// xbox "X" Button 3
 
-    //btn1_Y.whileHeld(new Hopper_Out());//xbox "Y" Button 4
+    btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
+    //btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5
+    
     //btn1_RB.whileHeld(new Hopper_Out());//xbox "RB" Button 6
 
     btn1_Back.whenPressed(new Command_Compressor_OFF());//xbox "Back" Button 7
+
     btn1_Start.whenPressed(new Command_Compressor_ON());//xbox "Start" Button 8
+
     btn1_LS.whenPressed(new Command_Shift_Gear());//xbox "Left Stick Click" Button 9
 
-    //btn1_RS.whileHeld(new Intake_Out());//xbox "Right Stick Click" Button 10
+    btn1_RS.whileHeld(new Command_Limelight_Initiation_Line());//xbox "Right Stick Click" Button 10
+
     //xbox "X Axis" Left Stick - 
     ////xbox "Y Axis" Left Stick - Drive Forward and Reverse
     ////xbox "X Axis 5" Right Stick - 
@@ -98,27 +104,15 @@ public class OI {
 
     // Secondary Driver Stick
     
-    /*
-    btn2_A.whileHeld(new Elevator_Down());//xbox "A" Button 1
-    btn2_B.whileHeld(new Elevator_Up());//xbox "B" Button 2
-    btn2_X.whileHeld(new Hopper_In());//xbox "X" Button 3
-    btn2_Y.whileHeld(new Hopper_Out());//xbox "Y" Button 4
-    btn2_LB.whileHeld(new Intake_Spin());//xbox "LB" Button 5
-    btn2_RB.whileHeld(new Intake_Out());//xbox "RB" Button 6
-    */
+  
 
-
-
-    
+   
     btn2_A.whileHeld(new Command_Intake_Ground());
     btn2_B.whileHeld(new Command_Intake_Station());
-    btn2_RB.whileHeld(new Command_Shoot());
+    btn2_X.whileHeld(new Command_Limelight_Initiation_Line());
+    //btn2_RB.whileHeld(new Command_Spin_Shooter());
     btn2_LB.whileHeld(new Command_Supply_Balls());
-    
-
-
-
-  
+     
 
     //btn2_Back.whileHeld(new Command_Unwinch());//xbox "Back" Button 7
     //btn2_Start.whileHeld(new Command_Winch());//xbox "Start" Button 8
@@ -135,9 +129,7 @@ public class OI {
     ////xbox "Left" Direction Pad - Tower Leftside
     ////xbox "Right" Direction Pad - Tower Rightside
 
-    // if (btn_Spear.get() == false) {
-    //   // new Command_Spear();
-    // }
+    
   }
   
   //returns joyxbox1 whenever getJoystickDriver is called

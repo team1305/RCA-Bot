@@ -7,14 +7,9 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 
-import com.ctre.phoenix.CANifier;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -41,9 +36,21 @@ public class RobotMap {
 
   public static CANSparkMax mtIntake = new CANSparkMax(7, MotorType.kBrushless);
   public static CANSparkMax mtElevator = new CANSparkMax(6, MotorType.kBrushless);
-  public static CANSparkMax mtHopper = new CANSparkMax(5, MotorType.kBrushless);//Originally 5 number
+  public static CANSparkMax mtHopper = new CANSparkMax(5, MotorType.kBrushless);
 
-  
+  public static WPI_TalonFX mtWicnh1 = new WPI_TalonFX(10);
+  public static WPI_TalonFX mtWicnh2 = new WPI_TalonFX(9);
+
+     //Shooter PID values
+     public static final double kP_SHOOTER = 0.085;
+     public static final double kI_SHOOTER = 0.0;
+     public static final double kD_SHOOTER = 0.0;
+     public static final double kF_SHOOTER = 0.0512;
+     public static final int kIZone_SHOOTER = 200;
+     public static final double SHOOTER_OUTPUT_TO_ENCODER_RATIO = 0.77; //Previous 3.0 Because 3 revolutions of the encoder was one revolution of the wheels, 24.0/36.0
+     public static final double TICKS_PER_ROTATION = 2048.0;
+     public static final int kLongCANTimeOutMs = 100;
+     public static final double kFlywheelTicksPerRevolution = 0;
 
   //public static CANSparkMax mtWinch1 = new CANSparkMax(5, MotorType.kBrushless);
   //public static CANSparkMax mtWinch2 = new CANSparkMax(6, MotorType.kBrushless);
