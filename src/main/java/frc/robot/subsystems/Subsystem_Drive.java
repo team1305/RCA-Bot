@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 
@@ -66,8 +65,8 @@ public class Subsystem_Drive extends Subsystem {
   DifferentialDrive drRobotDrive = new DifferentialDrive(scgLeft, scgRight);
 
   // Subsystem State Value
-  private Double enLeftStart;
-  private Double enRightStart;
+  //private Double enLeftStart;
+  //private Double enRightStart;
   
   //sets ramprate of drive motors -- now does things!
   public Subsystem_Drive() {
@@ -81,8 +80,29 @@ public class Subsystem_Drive extends Subsystem {
     mtRight1.configOpenloopRamp(0.4);
     mtRight2.configOpenloopRamp(0.4);
 
+    drRobotDrive.setDeadband(0.09); //By default, the Differential Drive class applies an input deadband of .02
+
     // SmartDashboard.putNumber("dSquareFactor", dSquareFactor);
     // SmartDashboard.putNumber("dThrottleFactor", dThrottleFactor);
+  }
+
+  public void setRightSide(double speed){
+    scgRight.set(speed);
+
+  }
+
+  public void setLeftSide(double speed){
+    scgLeft.set(speed);
+  }
+
+  public double getRightSide(){
+    double currentSpeed = scgRight.get();
+    return currentSpeed;
+  }
+
+  public double getLeftSide(){
+    double currentSpeed = scgLeft.get();
+    return currentSpeed;
   }
 
   @Override
@@ -90,6 +110,7 @@ public class Subsystem_Drive extends Subsystem {
     //unless interupted the default command will allow driver to drive with joystick
     setDefaultCommand(new Command_Drive_With_Joystick());
   }
+
 
   //creates a deadband for the joystick so that the robot does not spin
   // when nobody is touching the controls
@@ -108,17 +129,18 @@ public class Subsystem_Drive extends Subsystem {
   public void driveWithJoystick(final Joystick stick) {
 
     //creates variables for joystick x and y values
-    final double zRotation = ThrottleScale(Math.abs(stick.getY()* 1), stick.getRawAxis(4)* -1);
-    final double xSpeed = JoystickDeadBand(stick.getY()* 1);
+
+    ////TRYING drRobotDrive.setDeadband(0.09); ABOVE??? DOES IT WORK???
+    ////final double zRotation = ThrottleScale(Math.abs(stick.getY()* 1), stick.getRawAxis(4)* -1);
+    ////final double xSpeed = JoystickDeadBand(stick.getY()* 1);
+
+    final double zRotation = stick.getRawAxis(4)* -1;
+    final double xSpeed = stick.getY()* 1;
 
     //uses joystick to do driving thing
     drRobotDrive.curvatureDrive(xSpeed, zRotation, true);
 
-    // double dSquareFactor2 = SmartDashboard.getNumber("dSquareFactor", dSquareFactor);
-    // double dThrottleFactor2 = SmartDashboard.getNumber("dThrottleFactor", dThrottleFactor);
 
-    // if((dSquareFactor2 != dSquareFactor)) {dSquareFactor = dSquareFactor2;}
-    // if((dThrottleFactor2 != dThrottleFactor)) {dThrottleFactor = dThrottleFactor2;}
   }
 
   //stops the drive train
@@ -200,81 +222,3 @@ public class Subsystem_Drive extends Subsystem {
   */
 }
 
-/*
-  
-ooooooooooooooollllllllccccccccccccccccccccccccccclccccccccccccccccclclllllllllllllllllooooooooooooo
-oooooooolllolloooolllllllllllllccccccccccc;''',:lddc;;ldlc:;,;:ccccccllllllllllllllllloooooooooooooo
-ooooooollloooooooooolllllllllllllllccccl:'';:;,.:dd;..:kl'',,,'';ccccccccllllllllllllllooooooooddddd
-oooooooollloolllllllllllllllcccccccccccc'';:clc;cxd;..:Ol,:lccc,'ccccccclllllllllloooooooooooooooood
-looooooolllollllllllllllllllccccccccccc:..';ccclkxo:llcOOolllc:'':llllcllllllllllllooooooooooooooooo
-llllllolllllllllllllllccccccccccccccccc:..';cloxOxccdl:kKOxol:,..:lllllllllllllllllooooooooooooooooo
-llllllllllllllllllllcccccccccllllccccclc..''cxkOOo,;lc:k0OOkl,'..:lllllllllllllllloooooooooooooooooo
-llllllllllllllllllllcccccccclllllllllclc'   .,cl,..,::,,co:,... .:lllllllllllllllooooooooooooooooooo
-lllllllllllllcccccccccccllllllllllllcclc'     .'..';:c;.',......';;:cllllllloooolllloooloooooooooooo
-lllllllllllllllllllcccclllllllllllllcclc'     ....,:loc..'.  .. ...'cllllloooooooooooolllooooooooooo
-lllllllccccllccccccccclllllllllllclllllc'  ...;;..;:lo:.,c' ..  .clllloooooooooooooooooooodooooooooo
-lllllllllllolllllllllllllllllllllllllllc' .,'.;;.':coo;.,c'.',. .:oooooooooooooooooooooooodooooooooo
-oooooooollloollllllllllllllccclccl:;looo:,;cccl:,:llool;;c,.;c;.':clooolllloooooollllllllooooooolloo
-llllllllllloollllllllllllllcccccc:,,;;ldocloc:coloxdol:codooocccoxxxdlc:;coooooooooooooooooooooooloo
-lllllllllllollllllllllllllccccccc:::;:c:...,..:,.,l:::,',c,,;''',loocc:;,:loooooooooooooooollooooooo
-lllllllllllllllllllllllllccccccccccc:cc:. .. .,'.,c:ll..':'...  .clccllcllloooooooooooooooollloooooo
-lllllllllllllllllllllllllllllcccccll::c:.     .. ':cod;....     .;:cllcclllllloooooooooooooooooooooo
-lllllllllllllcccccllllllllllllllclol::c:.     ,' 'cllo;..;.     .,clc::lolllllllllloooooooollooooooo
-lllllllllllllcccccllllllllllllllclolc::;.    .;' 'codo;.':.     .;cc::cloollllllloooooooooollooooooo
-llllllllllllllcccccccccccccclllcclolccc;.',.';;. .,,;;'.':,...,..;cccclooollllllooooooooooollllloooo
-lllllllllllllllllllccccclllllllllloolll;.;:,;:c' .',::'.'cc;,:l'.:lccloooooooooooooooooooooooooooooo
-llllllllllllollllllllllllllllllcllollll;',,'',;. .;:oo,.'::;,;:..:cclloooololllooooooooooooooooooooo
-llllllllllcllccccllllllllcccccccclllccc;..     . .:okx,.........':clllloollllllloooooooolooooooooool
-llllllllllclllllllllllllllllllclclllccc,.        .:lkk,...      ,cllllloollllllllllloooolooooooooooo
-lllllllccccllllllllllllllllccccllllcccc,.  .     .:lxo'..      .;lllllloollllllllllllllllooooooooooo
-llllllllllclllllllllccccccccclllloo;;cc,.        .:lxc. .    ...;llll:cdollllllllllllllllooooooooooo
-lllllllllllllllllllllcclllllcllllooc;:c,..      .';:c;...    . .;lll::oddllllllllllllllllooloooooooo
-llllllllllllllllllllcclllccccccclllcc;;...  .   .,;;::''.      .;lc::lodolllllllllllllllloollllllllo
-llllllllllllllccccccccccccccccc::c:,,,'........'.,:;::,'........;:,;:clllllllllooloolllllllllllllloo
-lcclllllclcllcccccccccc:cc:c:;,'',........  . ',,cl:,;,;,,;.....'.','',:clllollllllllllllllllllllloo
-llllllllllllllccccccccccccccc'....,::c;...    ...,,..,,'........';:::,.',,;:llllollolllllooooooooooo
-lllllllllllllcccccccccccccccc:,',:clclc'..      .,:;,::'... .. .,cllll:,'..,clllllllllllllolllllllll
-llllllcccccclcccccccccccccccccccccccccc,.      ..';cdl;'...... .,:llllll:::cllllllllllllllolllllllll
-llllllcccccclccccccccccccccccccccccccccc'.  ..''..':lc,.    ....;cllllllllllllllllllllllllllllllllll
-llllccccccccclcccccccccccccc::::ccccccccc;..,c:...';:'.......'.,clllllllllllllllllllllllllllllllllll
-lcccccccccccccccccccccccccc::::::::cccccccc'.,;,.,;c:..';c:...;cllllllllllllllllllccclllllllllllllll
-cccccccccc:cccccccccccccccc:::::::::ccccccc;,..',..''..,,'..,:cccccccccclllllcccllllllllllllllllllll
-cccccccccccccccccccccccccc::::::::::::::ccc;,..,;.  ...'...:ccccccccccccccccccllllllllllcllcccclllll
-ccccccccccccccc:ccccccc::::::::::::::::::cc;,..,;...  ';..,cccccccccccccccccclllllllllllcllcccccllll
-llccccccccccccccccccccc::::::::::::::::::::;;. ';.....,;..,clcl:,:lllllllllllcccclllllllllllllllllll
-lcccccccccccllcccccccccccccc:::::::::;;:'';,,. .;,'...''...,;;:;;ldollcc:lllccccccccclccllllllllllll
-cccccccccccccc::cc:::::::::ccccccc:::',:;;,'....''..  .........':lodl;,''lOxc:::cccccccccllcllllllll
-;;;;;;;;;;;;;;;;;;;;;;;:cclllccccc::;;;::;;::,.',......'..''''.........,:,;'.'..::;;::::::::::::::::
-,,,,,,,,,,,,,,,,,''''',;:cldkOkxdlc:::::;;;;;,';:,''',;c:;:;,'.........;'.......,;,;;;;;;;,,,,,;;;;;
-,;,,;;,,;,,,,,,,,,,,,,;::coxkkkxdlc:;,,,;;;,,'',;,,,;;;:;,;,'..  .....''.''...''',,,,;ccccc:;;;;::::
-xxxxxxxxxxdoolcc::;::;:cllc:::;;;,,,,,,,,;;,;;;;::ccc::::;,..............'.....',;'';:cllllllxkkkkkk
-0000000Odolc:::;,'''''',;:::cl::c:,,,,'',,',,,,,;:cc;,;'..'..''''..';,,'.   .   .,,,;;:clcccoO0000KK
-000000Ooccccccccc::;''.........',;,;::;;:;,;;,,,,;:c:,,,,'.,:'..,'.:l:,..  .....'..''',;:cccd00000KK
-000000kc::cccllllllllcc::;,'...........'',;::::cccccll:;:,;lo,.''';lc,,.....''','..'',,;::clk00000KK
-KK000Kkc;;;;;;:::cccldkxolllcc::;;,'............'',,;;;;:codo::,..cl;......,:;'....''',;:cdO0000KKKK
-KKKK00Oo;;;,,;;,;;;;:oKKocxOOkdlllllllcc:;,,.... ........',;'..'...;;'',:cccc;',,...''',:ok0000KKKKK
-KKK0000ko:;;;,;;,,,,,;kOc:dxkXOloO0Oxoloolllllcc:;;;,'''............,:lllooolc:;,''',,:lxO0000KKKKXX
-KK000000OOxl;,'',,,,,:k0c,;cxKxlOKOKKolOK0Okdllllllllllllcccclc,'',;clooooolccldxkxkxxO0KKKKKKKXXXXX
-KKKK00000Oxl:;'......,oxocddoOOoxd:lkdo0Oxkkl::cccllllloooollollclllcclllllcclk00000KKKKKKKKXXXXXXXX
-KKKKKKKKK00OOxdoc:;'......':cdxcokdokxldxxkd:,;;;;;;:::cccllllolllooolccccc::lk00KKKKKKXXXXXXXXXXXXX
-XXXXXXXXXXKKKKKK0OOkdol:;,'......;codccdockKd;,,,,,;;;;;;;;;:::ccccccc:::::::oOKKKKKKXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXKKKKK00Okxdolc;,'.....,:cddc,,,,;;,,,,,,,,,,,,;,,,;;;;:::cldO0KKKKKKXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXKKKKK00Oxdolc;,'........'',,,,,,,,,,,,,,,,,;;::::cx00000000KKXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXKKK00Okxdol:;,..........'',,,;;,,,,,;:::lxO000KKKKKXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXKKK0Okxdolc:;'........'''',,,:cdO0000KKKKXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXNXXXXXXXXXNNNNXXXXXXXXXXXXXXKKKK00Okxdoc:;,,'',,;;cdO000KKKKKKXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXNNXNNNNNNNNNNNNNNXXXXXXXXXXXXXXKKKK00OOkkxxxxk0KKKKKXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXNNNNNNNNNNNNNNNNNNNNNNNNNXXXXXXXXXXXXXXXXXXXXXXXXXXXXXNNNXXXXXXXXXXXXNNXXXXXX
-XXXXXXXXXXXXXXXNNNNNXXXNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNXXXXXXXXXXXNNNNNNNNNNNNXXXXXNNNXXNNNNNNNNNXXXX
-
-
-
-
-
-
-
-
-
-
-
-*/
