@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -20,19 +21,28 @@ public class Subsystem_Hopper extends Subsystem {
   // here. Call these from Commands.
   public static CANSparkMax mtHopper = RobotMap.mtHopper;
 
+  public Subsystem_Hopper() {
+
+    
+    mtHopper.restoreFactoryDefaults();
+    mtHopper.setIdleMode(IdleMode.kCoast);
+    mtHopper.setOpenLoopRampRate(0.4);
+
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void hopperIn() {
-    mtHopper.set(-0.5);    
+  public void hopperIn(double speed) {
+    mtHopper.set(-speed);    
   }
 
-  public void hopperOut() {
+  public void hopperOut(double speed) {
 
-    mtHopper.set(0.5);
+    mtHopper.set(speed);
   }
 
   public void hopperStop() {
