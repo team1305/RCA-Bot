@@ -18,6 +18,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Command_Limelight_Initiation_Line extends Command {
+
+  private boolean isOnTarget;
+
   public Command_Limelight_Initiation_Line() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -45,8 +48,9 @@ public class Command_Limelight_Initiation_Line extends Command {
     //double y = ty.getDouble(0.0);
 
 
-    double Kp = -0.1f;
-    double min_command = 0.05f;
+    double Kp = -0.01f;
+    double Ki = 0.0f;
+    double Kf = 0.05f;  //feedforward - minimum command signal
 
     //float tx = table->GetNumber("tx");
     double left_command;
@@ -59,22 +63,48 @@ public class Command_Limelight_Initiation_Line extends Command {
 
     double heading_error = -x;
     double steering_adjust = 0.0f;
-            if (x > 1.0)
+            if (x > 1.5)
             {
-                    steering_adjust = Kp*heading_error - min_command;
+                    steering_adjust = Kp*heading_error - Kf;
             }
-            else if (x < 0.0)
+            else if (x < -1.5)
             {
-                    steering_adjust = Kp*heading_error + min_command;
+                    steering_adjust = Kp*heading_error + Kf;
             }
 
 
     left_command += steering_adjust;
     right_command -= steering_adjust;
 
+    SmartDashboard.putNumber("Left Command", left_command);
+    SmartDashboard.putNumber("Right Command", right_command);
+    SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+    SmartDashboard.putNumber("X", x);
 
-    Robot.drive.setLeftSide(left_command);
+
+    if (left_command > 0.75){
+      left_command = 0.75;
+    }
+
+    if (right_command > 0.75){
+      right_command = 0.75;
+    }
+
+    
+
+
+    Robot.drive.setLeftSide(-left_command);
     Robot.drive.setRightSide(right_command);
+
+
+
+    if (Math.abs(x) <= 1.5){
+      isOnTarget = true;
+    }
+
+    else{
+      isOnTarget = false;
+    }
 
 
 
@@ -84,17 +114,21 @@ public class Command_Limelight_Initiation_Line extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isOnTarget;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.drive.setLeftSide(0);
+    Robot.drive.setRightSide(0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.drive.setLeftSide(0);
+    Robot.drive.setRightSide(0);
   }
 }
