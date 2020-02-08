@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -22,19 +23,27 @@ public class Subsystem_Intake extends Subsystem {
   public static CANSparkMax mtIntake = RobotMap.mtIntake;
   public static Solenoid slndIntake = RobotMap.slndIntake;
 
+  public Subsystem_Intake() {
+    
+    mtIntake.restoreFactoryDefaults();
+    mtIntake.setIdleMode(IdleMode.kCoast);
+    mtIntake.setOpenLoopRampRate(0.4);
+
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void enableIntake() {
-    mtIntake.set(-0.75);
+  public void enableIntake(double speed) {
+    mtIntake.set(-speed);
 
   }
 
-  public void reverseIntake() {
-    mtIntake.set(0.75);
+  public void reverseIntake(double speed) {
+    mtIntake.set(speed);
   }
 
   public void stopIntake() {

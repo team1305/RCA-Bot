@@ -29,9 +29,9 @@ public class Command_Intake_Ground extends Command {
   @Override
   protected void execute() {
     Robot.intake.extendIntake();
-    Robot.intake.enableIntake();
-    Robot.hopper.hopperIn();
-    Robot.elevator.elevatorUp();
+    Robot.intake.enableIntake(0.5);
+    Robot.hopper.hopperIn(0.5);
+    Robot.elevator.elevatorUp(0.5);
     Robot.shooter.ShooterSpeed(-0.1);
 
   }
