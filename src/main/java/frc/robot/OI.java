@@ -17,6 +17,7 @@ import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
 import frc.robot.commands.Command_Limelight_Initiation_Line;
 import frc.robot.commands.Command_Shift_Gear;
+import frc.robot.commands.Command_Sing_The_song_of_my_People;
 //import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Supply_Balls;
 import frc.robot.commands.Command_Winch_Down;
@@ -113,6 +114,7 @@ public class OI {
     //btn2_RB.whileHeld(new Command_Spin_Shooter());
     btn2_LB.whileHeld(new Command_Supply_Balls());
      
+    btn2_Start.whenPressed(new Command_Sing_The_song_of_my_People());
 
     //btn2_Back.whileHeld(new Command_Unwinch());//xbox "Back" Button 7
     //btn2_Start.whileHeld(new Command_Winch());//xbox "Start" Button 8
