@@ -18,8 +18,10 @@ import frc.robot.subsystems.Subsystem_Elevator;
 import frc.robot.subsystems.Subsystem_Hopper;
 import frc.robot.subsystems.Subsystem_Intake;
 import frc.robot.subsystems.Subsystem_Limelight;
+import frc.robot.subsystems.Subsystem_Orchestra;
 import frc.robot.subsystems.Subsystem_Shooter;
 import frc.robot.subsystems.Subsystem_Winch;
+import jdk.javadoc.internal.doclets.formats.html.resources.standard;
 
 public class Robot extends TimedRobot {
 
@@ -31,6 +33,7 @@ public class Robot extends TimedRobot {
   public static Subsystem_Hopper hopper = new Subsystem_Hopper();
   public static Subsystem_Intake intake = new Subsystem_Intake();
   public static ShooterRPM shooterrpm = new ShooterRPM();
+  public static Subsystem_Orchestra orchestra = new Subsystem_Orchestra();
   
   public static Subsystem_Winch winch = new Subsystem_Winch();
 
