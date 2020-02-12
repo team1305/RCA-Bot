@@ -11,7 +11,6 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.robot.subsystems.ShooterRPM;
 import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_Drive;
 import frc.robot.subsystems.Subsystem_Elevator;
@@ -30,7 +29,6 @@ public class Robot extends TimedRobot {
   public static Subsystem_Elevator elevator = new Subsystem_Elevator();
   public static Subsystem_Hopper hopper = new Subsystem_Hopper();
   public static Subsystem_Intake intake = new Subsystem_Intake();
-  public static ShooterRPM shooterrpm = new ShooterRPM();
   
   public static Subsystem_Winch winch = new Subsystem_Winch();
 
