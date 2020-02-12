@@ -7,9 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 
 //import com.revrobotics.CANEncoder;
 //import com.revrobotics.CANSparkMax;
@@ -19,16 +19,29 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.Command_Drive_With_Joystick;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import com.kauailabs.navx.frc.AHRS;
 
 
 
 /**
  * Add your docs here.
  */
-public class Subsystem_Drive extends Subsystem {
+public class Subsystem_Drive extends SubsystemBase {
 
   //variable for deadband
   public double dDeadband = 0.1;
@@ -44,6 +57,8 @@ public class Subsystem_Drive extends Subsystem {
   private final WPI_TalonFX mtRight1 = RobotMap.mtDriveRight1;
   private final WPI_TalonFX mtRight2 = RobotMap.mtDriveRight2;
 
+  private AHRS navx = new AHRS(SerialPort.Port.kMXP);
+
   //grabs drive encoder information from RobotMap
   //private final CANEncoder enLeft1 = RobotMap.enDriveLeft1;
   //private final CANEncoder enLeft2 = RobotMap.enDriveLeft2;
@@ -52,6 +67,9 @@ public class Subsystem_Drive extends Subsystem {
 
   //grabs solenoid for gear shifting
   private final Solenoid slndShift = RobotMap.slndGearShifter;
+
+  private DifferentialDriveOdometry odometry;
+
 
 
   //creates motor controller groups for left and right motors
@@ -73,6 +91,11 @@ public class Subsystem_Drive extends Subsystem {
     //Trying to get brake mode working
     mtLeft1.setNeutralMode(NeutralMode.Brake);
     mtLeft2.setNeutralMode(NeutralMode.Brake);
+    mtRight1.setNeutralMode(NeutralMode.Brake);
+    mtRight2.setNeutralMode(NeutralMode.Brake);
+
+    mtLeft1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    mtRight1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
 
     mtLeft1.configOpenloopRamp(0.4);
@@ -105,12 +128,26 @@ public class Subsystem_Drive extends Subsystem {
     return currentSpeed;
   }
 
+
+  /*
   @Override
   public void initDefaultCommand() {
     //unless interupted the default command will allow driver to drive with joystick
     setDefaultCommand(new Command_Drive_With_Joystick());
   }
+  */
 
+
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(), getRightDistance());
+    //SmartDashboard.putNumber("Left Distance", getLeftDistance());
+    //SmartDashboard.putNumber("Right Distance", getRightDistance());
+    //SmartDashboard.putNumber("Heading", getHeading());
+    driveWithJoystick(Robot.oi.getJoystickDriver());
+  }
 
   //creates a deadband for the joystick so that the robot does not spin
   // when nobody is touching the controls
@@ -180,6 +217,53 @@ public class Subsystem_Drive extends Subsystem {
     }
     SmartDashboard.putBoolean("Gear", bIsLow);
   }
+
+
+
+  public Pose2d getPose() {
+    return odometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(getLeftEncRate(), getRightEncRate());
+  }
+
+  public double getLeftEncRate() {
+    //return leftDriveEnc.getVelocity() / 60 * Constants.FEET_PER_ROTATIONS;
+    return mtLeft1.getSelectedSensorVelocity() / 60 * Constants.FEET_PER_ROTATIONS;
+  }
+
+  public double getRightEncRate() {
+    return mtRight1.getSelectedSensorVelocity() / 60 * Constants.FEET_PER_ROTATIONS;
+  }
+
+  public double getLeftEncPos() {
+    return mtLeft1.getSelectedSensorPosition();
+  }
+
+  public double getRightEncPos() {
+    return mtRight1.getSelectedSensorPosition();
+  }
+
+  public void voltageDrive(double leftVolts, double rightVolts) {
+    mtLeft1.setVoltage(leftVolts);
+    mtRight1.setVoltage(-rightVolts);
+  }
+
+  public double getHeading() {
+    return Math.IEEEremainder(navx.getAngle(), 360) * (Constants.GYRO_REVERSED ? -1.0 : 1.0);
+  }
+
+  public double getLeftDistance() { // returns distance in feet
+    return getLeftEncPos() * Constants.FEET_PER_ROTATIONS;
+  }
+
+  public double getRightDistance() {
+    return getRightEncPos() * Constants.FEET_PER_ROTATIONS;
+  }
+
+
+
 
   //gets encoder position for the left side
   /*

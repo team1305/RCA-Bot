@@ -9,12 +9,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Subsystem_Drive;
 
 public class autoTest extends Command {
   public autoTest() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.drive);
+    addrequirements(Robot.drive);
+  }
+
+  private void addrequirements(Subsystem_Drive drive) {
   }
 
   // Called just before this Command runs the first time
