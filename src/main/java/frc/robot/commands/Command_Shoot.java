@@ -27,7 +27,7 @@ public class Command_Shoot extends Command {
   @Override
   protected void execute() {
     //bIsFinished = false;
-    Robot.shooter.ShooterSpeed(0.6);//THIS IS THE VALUE YOU WANT TO CHANGE FOR SHOOTER SPEED
+    Robot.shooter.setShooterRPM(0);//THIS IS THE VALUE YOU WANT TO CHANGE FOR SHOOTER SPEED
     
     //bIsFinished = true;
 
@@ -43,7 +43,7 @@ public class Command_Shoot extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.shooter.ShooterStop();   
+    Robot.shooter.setShooterRPM(0);   
   }
 
   // Called when another command which requires one or more of the same
