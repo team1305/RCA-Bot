@@ -32,7 +32,6 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.enableIntake(0.5);
     Robot.hopper.hopperIn(0.5);
     Robot.elevator.elevatorUp(0.5);
-    Robot.shooter.ShooterSpeed(-0.1);
 
   }
 
@@ -49,7 +48,7 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
     Robot.elevator.elevatorStop();
-    Robot.shooter.ShooterSpeed(0);
+
   }
 
   // Called when another command which requires one or more of the same
@@ -60,6 +59,6 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
     Robot.elevator.elevatorStop();
-    Robot.shooter.ShooterSpeed(0);
+
   }
 }
