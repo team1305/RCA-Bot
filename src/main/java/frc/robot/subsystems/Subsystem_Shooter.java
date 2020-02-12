@@ -19,6 +19,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.Command_ai_loop;
+
 
 
 /**
@@ -28,95 +30,88 @@ public class Subsystem_Shooter extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private final WPI_TalonFX mtShootLeft = RobotMap.mtShootLeft1;
-  private final WPI_TalonFX mtShootRight = RobotMap.mtShootRight1;
-
-  public final int timeOutMs = 30;
-  public final int loopIDX = 0;//Leave as zero
-  public final double f = 0; //1023 is actually 100% 'f' value for these motors.
-  public final double p = 0; //.25;
-  public final double i = 0; //.001;
-  public final double d = 0; //20;  
-
-
+  
+  private final WPI_TalonFX shooterA = RobotMap.mtShootLeft1;
+  private final WPI_TalonFX shooterB = RobotMap.mtShootRight1;
 
   public Subsystem_Shooter() {
-    mtShootLeft.configFactoryDefault();
-    mtShootRight.configFactoryDefault();
 
-    // Set Motors to Neutral mode    
-    mtShootLeft.setNeutralMode(NeutralMode.Coast);
-    mtShootRight.setNeutralMode(NeutralMode.Coast);  
-
-    // Invert Right Motor
-    mtShootRight.setInverted(true);
-    // Set Right Motor to follow Left motor
-    //mtShootRight.set(TalonFXControlMode.Follower, 5);
-    
-    // Set Ramp Rates
-    //mtShootLeft.setOpenLoopRampRate(0.4);
-    //mtShootRight.setOpenLoopRampRate(0.4);
-
-    mtShootLeft.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, loopIDX, timeOutMs); //INTEGRATEDSENSOR maybe a solution||||||||||||||||||||||||||
-    mtShootRight.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, loopIDX, timeOutMs);
+      
+      
+      shooterA.configFactoryDefault();
+      shooterB.configFactoryDefault();
+      shooterA.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
 
-    mtShootLeft.config_kF(loopIDX, f, timeOutMs);
-    mtShootLeft.config_kP(loopIDX, p, timeOutMs);
-    mtShootLeft.config_kI(loopIDX, i, timeOutMs);
-    mtShootLeft.config_kD(loopIDX, d, timeOutMs);
+      shooterA.setInverted(false);
+      shooterA.setSensorPhase(true);
 
-    mtShootRight.config_kF(loopIDX, f, timeOutMs);
-    mtShootRight.config_kP(loopIDX, p, timeOutMs);
-    mtShootRight.config_kI(loopIDX, i, timeOutMs);
-    mtShootRight.config_kD(loopIDX, d, timeOutMs);
+      shooterB.setInverted(true);
+      shooterB.setSensorPhase(true);
 
+      shooterA.setNeutralMode(NeutralMode.Coast);
+      shooterB.setNeutralMode(NeutralMode.Coast);
 
+//        shooterA.configClosedLoopPeakOutput(kControlSlot, Constants.kShooterMaxPrecentOutput);
+
+      shooterA.config_kP(0, RobotMap.kP_SHOOTER);
+      shooterA.config_kI(0, RobotMap.kI_SHOOTER);
+      shooterA.config_kD(0, RobotMap.kD_SHOOTER);
+      shooterA.config_kF(0, RobotMap.kF_SHOOTER);
+      shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
+
+      shooterA.clearStickyFaults();
+      shooterB.clearStickyFaults();
+
+      shooterB.follow(shooterA);
   }
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    //unless interupted the default command will allow driver to drive with joystick
+    setDefaultCommand(new Command_ai_loop());
   }
 
-  public void ShooterSpeed(double ispeed) {
 
-    double motorRPMR = mtShootRight.getSelectedSensorVelocity();
-    double motorRPML = mtShootLeft.getSelectedSensorVelocity();
+  public void setShooterSpeed(double speed) {
+      shooterA.set(ControlMode.PercentOutput, speed);
+  }
 
-    mtShootLeft.set(ControlMode.PercentOutput, ispeed);     
-    mtShootRight.set(ControlMode.PercentOutput, ispeed);
+  public void resetShooterPosition() {
+      shooterA.setSelectedSensorPosition(0);
+  }
 
-    SmartDashboard.putNumber("ShooterSpeedR", motorRPMR);
-    SmartDashboard.putNumber("ShooterSpeedL", motorRPML);
+  public double getShooterRotations() {
+      return shooterA.getSelectedSensorPosition() / RobotMap.SHOOTER_OUTPUT_TO_ENCODER_RATIO / RobotMap.TICKS_PER_ROTATION;
+  }
 
-    
+  public double getShooterRPM() {
+      return shooterA.getSelectedSensorVelocity() / RobotMap.SHOOTER_OUTPUT_TO_ENCODER_RATIO / RobotMap.TICKS_PER_ROTATION * 10.0 * 60.0;
+  }
+
+  public void setShooterRPM(double rpm) {
+      // double kF = (shooterA.getMotorOutputPercent() * 1023) / shooterA.getSelectedSensorVelocity();
+      // shooterA.config_kF(0, kF);
+      shooterA.set(ControlMode.Velocity, shooterRPMToNativeUnits(rpm));
+  }
+
+  public double shooterRPMToNativeUnits(double rpm) {
+      return rpm * RobotMap.SHOOTER_OUTPUT_TO_ENCODER_RATIO * RobotMap.TICKS_PER_ROTATION / 10.0 / 60.0;
+  }
+
+  @Override
+  public void periodic() {
+      SmartDashboard.putNumber("Shooter Rotations", getShooterRotations());
+      SmartDashboard.putNumber("Shooter RPM", getShooterRPM());
+      SmartDashboard.putNumber("Shooter Output Percent", shooterA.getMotorOutputPercent());
+      // SmartDashboard.putNumber("Shooter Velocity Native", shooterA.getSelectedSensorVelocity());
+      // SmartDashboard.putNumber("Shooter Stator Current", shooterA.getStatorCurrent());
+      // SmartDashboard.putNumber("Shooter Supply Current", shooterA.getSupplyCurrent());
    }
 
-   public void ShooterStop() {
-    
-    mtShootLeft.set(ControlMode.Velocity, 0);
-    mtShootRight.set(ControlMode.Velocity, 0);
 
-
-    int timeOutMs = 30;
-    int loopIDX = 0;
-    double f = 0;
-    double p = 0;
-    double i = 0;
-    double d = 0;  
-
-    mtShootLeft.config_kF(loopIDX, f, timeOutMs);
-    mtShootLeft.config_kP(loopIDX, p, timeOutMs);
-    mtShootLeft.config_kI(loopIDX, i, timeOutMs);
-    mtShootLeft.config_kD(loopIDX, d, timeOutMs);
-
-    mtShootRight.config_kF(loopIDX, f, timeOutMs);
-    mtShootRight.config_kP(loopIDX, p, timeOutMs);
-    mtShootRight.config_kI(loopIDX, i, timeOutMs);
-    mtShootRight.config_kD(loopIDX, d, timeOutMs);
-  }
+public void set(ControlMode percentoutput, double d) {
+}
 }
 
 
