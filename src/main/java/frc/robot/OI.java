@@ -15,7 +15,6 @@ import frc.robot.commands.Command_Compressor_ON;
 
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
-import frc.robot.commands.Command_Limelight_Initiation_Line;
 import frc.robot.commands.Command_Shift_Gear;
 //import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Supply_Balls;
@@ -88,7 +87,7 @@ public class OI {
 
     btn1_LS.whenPressed(new Command_Shift_Gear());//xbox "Left Stick Click" Button 9
 
-    btn1_RS.whileHeld(new Command_Limelight_Initiation_Line());//xbox "Right Stick Click" Button 10
+    //btn1_RS.whileHeld(new Command_Limelight_Initiation_Line());//xbox "Right Stick Click" Button 10
 
     //xbox "X Axis" Left Stick - 
     ////xbox "Y Axis" Left Stick - Drive Forward and Reverse
@@ -109,7 +108,7 @@ public class OI {
    
     btn2_A.whileHeld(new Command_Intake_Ground());
     btn2_B.whileHeld(new Command_Intake_Station());
-    btn2_X.whileHeld(new Command_Limelight_Initiation_Line());
+    //btn2_X.whileHeld(new Command_Limelight_Initiation_Line());
     //btn2_RB.whileHeld(new Command_Spin_Shooter());
     btn2_LB.whileHeld(new Command_Supply_Balls());
      
