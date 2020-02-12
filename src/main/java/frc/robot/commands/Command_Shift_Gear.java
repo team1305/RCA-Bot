@@ -9,13 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.subsystems.Subsystem_Drive;
 
 public class Command_Shift_Gear extends Command {
 
   private boolean bIsFinished = false;
 
-  public Command_Shift_Gear() {   
-    requires(Robot.drive);
+  public Command_Shift_Gear() {
+    addrequirements(Robot.drive);
+  }
+
+  private void addrequirements(Subsystem_Drive drive) {
   }
 
   // Called just before this Command runs the first time
