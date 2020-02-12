@@ -10,8 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.Robot;
-//import frc.robot.subsystems.ShooterRPM;
-import frc.robot.subsystems.ShooterRPM;
 
 public class Spin_Shooter_RPM extends Command {
 
@@ -20,12 +18,10 @@ public class Spin_Shooter_RPM extends Command {
   public Spin_Shooter_RPM(double RPM) {
 
     //requires(Robot.shooterrpm);
-    addRequirements(Robot.shooterrpm);
+    requires(Robot.shooter);
     this.RPM = RPM;
   }
 
-  private void addRequirements(ShooterRPM shooterrpm) {
-  }
  
   // Called just before this Command runs the first time
   @Override
@@ -36,7 +32,7 @@ public class Spin_Shooter_RPM extends Command {
   @Override
   protected void execute() {
 
-    Robot.shooterrpm.setShooterRPM(RPM);
+    Robot.shooter.setShooterRPM(RPM);
 
   }
 
@@ -51,7 +47,7 @@ public class Spin_Shooter_RPM extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.shooterrpm.setShooterRPM(0);
+    Robot.shooter.setShooterRPM(0);
 
 
   }
