@@ -32,14 +32,18 @@ public class RobotMap {
 
   public static WPI_TalonFX mtShootLeft1 = new WPI_TalonFX(11);
   public static WPI_TalonFX mtShootRight1 = new WPI_TalonFX(12);
+  public static WPI_TalonFX mtShootRight2 = new WPI_TalonFX(13);
 
 
-  public static CANSparkMax mtIntake = new CANSparkMax(7, MotorType.kBrushless);
-  public static CANSparkMax mtElevator = new CANSparkMax(6, MotorType.kBrushless);
-  public static CANSparkMax mtHopper = new CANSparkMax(5, MotorType.kBrushless);
+  public static WPI_TalonFX mtIntake = new WPI_TalonFX(7);
+  public static WPI_TalonFX mtElevator = new WPI_TalonFX(6);
+  public static WPI_TalonFX mtHopper = new WPI_TalonFX(5);
 
   public static WPI_TalonFX mtWicnh1 = new WPI_TalonFX(10);
   public static WPI_TalonFX mtWicnh2 = new WPI_TalonFX(9);
+
+
+  public static CANSparkMax mtLed = new CANSparkMax(20, MotorType.kBrushless);
 
      //Shooter PID values
      public static final double kP_SHOOTER = 0.085;
@@ -80,6 +84,8 @@ public class RobotMap {
   public static Solenoid slndGearShifter = new Solenoid(0);
 
   public static Solenoid slndIntake =  new Solenoid(4);
+
+  public static Solenoid slndHood =  new Solenoid(5);
   /*
   public static Solenoid slndTowerStage2 = new Solenoid(6);
   public static Solenoid slndIntakeMove = new Solenoid(2);
