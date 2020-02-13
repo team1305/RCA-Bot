@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
 
+	/*
 	public static final int FRONT_LEFT_DRIVE_CAN = 0;
 	public static final int MID_LEFT_DRIVE_CAN = 1;
 	public static final int REAR_LEFT_DRIVE_CAN = 2;
@@ -49,6 +50,7 @@ public final class Constants {
 	public static final int OPERATOR_CONTROLLER_PORT = 0;
 
 	public static final int LED_PWM_PORT = 0;
+	*/
 	public static final double DEADBAND = 0.1;
 
 	public static final double ROTATE_KP = 0.3; // arbitrary
@@ -56,13 +58,7 @@ public final class Constants {
 	public static final double DRIVE_KP = 0.3; // arbitrary
 	public static final double FEET_PER_ROTATIONS = 1.5; // arbitrary
 
-	public static final double LIMELIGHT_ROTATE_KP = 0.05;
-	public static final double LIMELIGHT_DRIVE_KP = 0.05;
-	public static final double LIMELIGHT_DRIVE_MAX_SPEED = 0.05;
-	public static final double LIMELIGHT_TARGET_TOLERANCE = 0.05;
 
-	public static final double SHOOTER_VEL_TOLERANCE = 2.0;
-	public static final double SHOOTER_LEFT_KP = 2.0;
 
 	public static final boolean GYRO_REVERSED = true;
 
@@ -72,28 +68,26 @@ public final class Constants {
     // These characterization values MUST be determined either experimentally or theoretically
     // for *your* robot's drive.
     // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
-    // values for your robot.
-    public static final double ksVolts = 0.22;
-    public static final double kvVoltSecondsPerMeter = 1.98;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+	// values for your robot.
+	
+
+    public static final double ksVolts = 0.22; //CHANGE THIS
+    public static final double kvVoltSecondsPerMeter = 1.98; //CHANGE THIS
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2; //CHANGE THIS
 
     // Example value only - as above, this must be tuned for your drive!
     public static final double kPDriveVel = 8.5;
-	public static final double kTrackwidthMeters = 0.4955;
+	public static final double kTrackwidthMeters = 0.4955; //CHANGE THIS
     public static final DifferentialDriveKinematics kDriveKinematics =
 		new DifferentialDriveKinematics(kTrackwidthMeters);
-	public static final double kMaxSpeedMetersPerSecond = 3;
-	public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+	public static final double kMaxSpeedMetersPerSecond = 3; //CHANGE THIS
+	public static final double kMaxAccelerationMetersPerSecondSquared = 3; //CHANGE THIS
 	// Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
 	public static final double kRamseteZeta = 0.7;
 	
 
 
-	// Controller mappings
-	public static final int A_BUTTON = 0;
-	public static final int B_BUTTON = 1;
-	public static final int X_BUTTON = 2;
-	public static final int Y_BUTTON = 3;
+
 
 }
