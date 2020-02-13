@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.Subsystem_Drive;
@@ -29,6 +30,7 @@ public class Command_ai_loop extends Command {
   private boolean btarget;
   private double zone1threshold = 50; //  pixel width
   public double distance;
+  private int iloops = 0;
   
 
   private double x, thor; //Limelight Values
@@ -61,6 +63,68 @@ public class Command_ai_loop extends Command {
   @Override
   protected void execute() {
      // AI Loop, States HUNT, SHOOT
+
+     if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  {
+
+      if (iloops <= 50){
+        Robot.led.setYellow();
+        iloops = iloops +1;
+        
+      }
+
+      else {
+        setColorWheel();
+        iloops = iloops +1;
+
+        if (iloops == 100){
+          iloops = 0;
+        }
+
+      }
+    }
+
+        
+      else if (Robot.intake.isIntakeOn() && (getGamedata() == "")){
+
+      Robot.led.setYellow();
+
+      }
+
+     else if (Robot.limelight.is_Target() && (getGamedata() != "")){
+      if (iloops <= 50){
+        Robot.led.setGreen();
+        iloops = iloops +1;
+        
+      }
+
+      else {
+        setColorWheel();
+        iloops = iloops +1;
+
+        if (iloops == 100){
+          iloops = 0;
+        }
+
+      }
+      
+     }
+
+      else if (Robot.limelight.is_Target() && (getGamedata() == "")){
+      Robot.led.setGreen();
+     }
+
+     else {
+      Robot.led.setBlack();
+     }
+
+    
+
+
+
+
+
+
+
      if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
         
        switch (cstate) {  
@@ -74,6 +138,8 @@ public class Command_ai_loop extends Command {
 
 
          if (Robot.limelight.is_Target()) {
+
+
 
             left_command = Robot.drive.getLeftSide();
             right_command = Robot.drive.getRightSide();
@@ -137,19 +203,24 @@ public class Command_ai_loop extends Command {
          break;
         case "SHOOT" : 
            if (distance <=60){
+             Robot.shooter.hoodUp();
              irpm = 6000;
            }
 
            else if ((distance > 60) && (distance <= 90)){
              irpm = 6250;
+             Robot.shooter.hoodDown();
+             
            }
 
            else if ((distance > 90) && (distance <= 120)){
              irpm = 6500;
+             Robot.shooter.hoodDown();
            }
 
            else{
              irpm = 6750;
+             Robot.shooter.hoodDown();
            }
 
            // Fire up the Shooter
@@ -174,6 +245,11 @@ public class Command_ai_loop extends Command {
            Robot.elevator.elevatorUp(0);
            Robot.hopper.hopperOut(0);
            Robot.intake.enableIntake(0);
+           
+           Robot.shooter.hoodDown();
+
+
+           Robot.led.setBlack();
 
            cstate = "HUNT";
            izone = 1;
@@ -215,5 +291,39 @@ public class Command_ai_loop extends Command {
   @Override
   protected void interrupted() {
     end();
+  }
+
+  public String getGamedata(){
+    return DriverStation.getInstance().getGameSpecificMessage();
+  }
+
+  public void setColorWheel(){
+
+
+    String gameData;
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if(gameData.length() > 0)
+    {
+      switch (gameData.charAt(0))
+      {
+        case 'B' :
+        Robot.led.setBlue();
+          break;
+        case 'G' :
+        Robot.led.setGreen();
+          break;
+        case 'R' :
+        Robot.led.setRed();
+          break;
+        case 'Y' :
+        Robot.led.setYellow();
+          break;
+        default :
+        Robot.led.setBlack();
+          break;
+      }
+    } else {
+      //Code for no data received yet
+    }
   }
 }
