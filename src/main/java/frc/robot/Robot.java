@@ -7,18 +7,24 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_Drive;
 import frc.robot.subsystems.Subsystem_Elevator;
 import frc.robot.subsystems.Subsystem_Hopper;
 import frc.robot.subsystems.Subsystem_Intake;
+import frc.robot.subsystems.Subsystem_LED;
 import frc.robot.subsystems.Subsystem_Limelight;
 import frc.robot.subsystems.Subsystem_Shooter;
 import frc.robot.subsystems.Subsystem_Winch;
+import frc.robot.trajectories.GatherFromTrench;
 
 public class Robot extends TimedRobot {
 
@@ -28,11 +34,16 @@ public class Robot extends TimedRobot {
   public static Subsystem_Compressor compressor = new Subsystem_Compressor();
   public static Subsystem_Elevator elevator = new Subsystem_Elevator();
   public static Subsystem_Hopper hopper = new Subsystem_Hopper();
-  public static Subsystem_Intake intake = new Subsystem_Intake();
-  
+  public static Subsystem_Intake intake = new Subsystem_Intake();  
   public static Subsystem_Winch winch = new Subsystem_Winch();
 
   public static Subsystem_Limelight limelight = new Subsystem_Limelight();
+
+  public static Subsystem_LED led = new Subsystem_LED();
+
+
+
+  public static HashMap<String, Trajectory> paths = new HashMap<>();
 
   
 
@@ -43,6 +54,8 @@ public class Robot extends TimedRobot {
   //Run when the robot is first started
   @Override
   public void robotInit() {
+
+    generateTrajectories();
 
     //resets the encoder on initialize
     //Robot.tower.resetEncoder();
@@ -87,8 +100,29 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
-    //in auto/sandstorm calls teleop
-    teleopPeriodic();
+    //Autonomous Commands Using ShuffleBoard
+
+    
+    if (SmartDashboard.getBoolean("Center", true)){
+
+
+    }
+
+    else if (SmartDashboard.getBoolean("Right", true)){
+
+
+    }
+
+    else if (SmartDashboard.getBoolean("Left", true)){
+
+
+    }
+
+    else{
+
+    }
+
+  
   }
 
   //Called when teleop is initialised
@@ -108,5 +142,16 @@ public class Robot extends TimedRobot {
   //This function is called periodically during test mode
   @Override
   public void testPeriodic() {
+  }
+
+
+  public static void generateTrajectories() {
+
+    paths.put("Gather", GatherFromTrench.generate());
+    SmartDashboard.putBoolean("Paths Generated", true);
+  }
+
+  public Subsystem_Drive getDrive() {
+    return drive;
   }
 }
