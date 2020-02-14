@@ -28,7 +28,7 @@ public class Subsystem_Limelight extends Subsystem {
 
 
   public Subsystem_Limelight() {
-    table = Robot.limelight.getLimelightValues();
+    table = getLimelightValues();
   }
 
   public double get_Tx(){
