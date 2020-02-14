@@ -50,7 +50,7 @@ public class Command_ai_loop extends Command {
 
 
 
-// Called just before this Command runs the first time
+// Called just before this Command runs the first time.
   @Override
   protected void initialize() {
     cstate = "HUNT";
@@ -64,6 +64,7 @@ public class Command_ai_loop extends Command {
   protected void execute() {
      // AI Loop, States HUNT, SHOOT
 
+     //When game data isn't blank, and intake is on
      if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  {
 
       if (iloops <= 50){
@@ -83,13 +84,16 @@ public class Command_ai_loop extends Command {
       }
     }
 
-        
+
+      //When game data is blank, and intake is on
       else if (Robot.intake.isIntakeOn() && (getGamedata() == "")){
 
       Robot.led.setYellow();
 
       }
 
+
+     //When target is aquired and game data isn't blank 
      else if (Robot.limelight.is_Target() && (getGamedata() != "")){
       if (iloops <= 50){
         Robot.led.setGreen();
@@ -109,6 +113,7 @@ public class Command_ai_loop extends Command {
       
      }
 
+     //When target is aquired and game data is blank 
       else if (Robot.limelight.is_Target() && (getGamedata() == "")){
       Robot.led.setGreen();
      }
@@ -124,9 +129,10 @@ public class Command_ai_loop extends Command {
 
 
 
-
+     //Vision tracking code, activates when right bumper is pressed
      if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
         
+      //Limelight turn to target
        switch (cstate) {  
        case "HUNT" : 
          // Use Limelight to move to target
@@ -200,6 +206,7 @@ public class Command_ai_loop extends Command {
               
          } // if btarget
 
+         //Check hood angle, and shooter speed based on zone
          break;
         case "SHOOT" : 
            if (distance <=60){
@@ -236,7 +243,7 @@ public class Command_ai_loop extends Command {
           }
         break;
       }
-
+      
      } else { // button not pressed
         if (cstate == "SHOOT") {
            // Button no longer pressed but last state was shoot
@@ -297,9 +304,8 @@ public class Command_ai_loop extends Command {
     return DriverStation.getInstance().getGameSpecificMessage();
   }
 
+
   public void setColorWheel(){
-
-
     String gameData;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     if(gameData.length() > 0)
@@ -326,4 +332,5 @@ public class Command_ai_loop extends Command {
       //Code for no data received yet
     }
   }
+  
 }
