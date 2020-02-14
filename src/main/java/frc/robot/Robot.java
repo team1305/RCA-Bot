@@ -13,6 +13,7 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import frc.robot.subsystems.Subsystem_Compressor;
@@ -51,6 +52,8 @@ public class Robot extends TimedRobot {
   public static UsbCamera camera;
   public static OI oi;
 
+  SendableChooser<Integer> autoChooser = new SendableChooser<>();
+
   //Run when the robot is first started
   @Override
   public void robotInit() {
@@ -70,6 +73,16 @@ public class Robot extends TimedRobot {
 
       System.out.println("ERROR: setting camera: " + ex.getMessage()) ;
     } 
+
+
+    autoChooser.setDefaultOption("Auto1", 1);
+    autoChooser.addOption("Auto2", 2);
+    // etc.
+    SmartDashboard.putData("Autonomous routine", autoChooser);
+
+
+
+
   }
 
   //This function is a loop that is always running
@@ -102,18 +115,21 @@ public class Robot extends TimedRobot {
 
     //Autonomous Commands Using ShuffleBoard
 
+    int autoMode = autoChooser.getSelected();
+    // Run the appropriate command
+
     
-    if (SmartDashboard.getBoolean("Center", true)){
+    if (autoMode == 1){
 
 
     }
 
-    else if (SmartDashboard.getBoolean("Right", true)){
+    else if (autoMode == 2){
 
 
     }
 
-    else if (SmartDashboard.getBoolean("Left", true)){
+    else if (autoMode == 3){
 
 
     }
