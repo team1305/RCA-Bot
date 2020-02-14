@@ -31,7 +31,7 @@ public class Command_RamseteController extends CommandBase {
     this.traj = traj;
     driveSub = drive;
   }
-
+  /*
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -64,4 +64,5 @@ public class Command_RamseteController extends CommandBase {
   public boolean isFinished() {
     return true;
   }
+  */
 }
