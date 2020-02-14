@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -20,14 +23,18 @@ import frc.robot.RobotMap;
 public class Subsystem_Intake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public static CANSparkMax mtIntake = RobotMap.mtIntake;
+  public static WPI_TalonFX mtIntake = RobotMap.mtIntake;
   public static Solenoid slndIntake = RobotMap.slndIntake;
+
+
+  private boolean intakeOn = false;
 
   public Subsystem_Intake() {
     
-    mtIntake.restoreFactoryDefaults();
-    mtIntake.setIdleMode(IdleMode.kCoast);
-    mtIntake.setOpenLoopRampRate(0.4);
+    mtIntake.configFactoryDefault();
+    mtIntake.setNeutralMode(NeutralMode.Coast);
+    mtIntake.configOpenloopRamp(0.4);
+    mtIntake.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
 
   }
 
@@ -38,27 +45,35 @@ public class Subsystem_Intake extends Subsystem {
   }
 
   public void enableIntake(double speed) {
-    mtIntake.set(-speed);
+    mtIntake.set(ControlMode.PercentOutput, -speed);
 
   }
 
   public void reverseIntake(double speed) {
-    mtIntake.set(speed);
+    mtIntake.set(ControlMode.PercentOutput, speed);
   }
 
   public void stopIntake() {
-    mtIntake.set(0);
+    mtIntake.set(ControlMode.PercentOutput, 0);
   }
 
 
   public void extendIntake() {
     slndIntake.set(true);
+    intakeOn = true;
   }
 
   public void retractIntake() {
     slndIntake.set(false);
+    intakeOn = false;
 
   }
+
+
+  public boolean isIntakeOn(){
+    return intakeOn;
+  }
+  
 }
 
 

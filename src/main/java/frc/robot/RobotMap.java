@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 
@@ -39,11 +40,14 @@ public class RobotMap {
   public static WPI_TalonFX mtElevator = new WPI_TalonFX(6);
   public static WPI_TalonFX mtHopper = new WPI_TalonFX(5);
 
-  public static WPI_TalonFX mtWicnh1 = new WPI_TalonFX(10);
-  public static WPI_TalonFX mtWicnh2 = new WPI_TalonFX(9);
+  public static WPI_TalonFX mtWinch1 = new WPI_TalonFX(10);
+  public static WPI_TalonFX mtWinch2 = new WPI_TalonFX(9);
 
 
   public static CANSparkMax mtLed = new CANSparkMax(20, MotorType.kBrushless);
+
+
+  public final static StatorCurrentLimitConfiguration currentLimitConfig = new StatorCurrentLimitConfiguration(true, 40, 39.95, 1);
 
      //Shooter PID values
      public static final double kP_SHOOTER = 0.085;
@@ -100,7 +104,6 @@ public class RobotMap {
   public static void init() {    
 
   }
-
 
 }
 

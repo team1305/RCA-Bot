@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -33,6 +34,9 @@ public class Subsystem_Shooter extends Subsystem {
   
   private final WPI_TalonFX shooterA = RobotMap.mtShootLeft1;
   private final WPI_TalonFX shooterB = RobotMap.mtShootRight1;
+  private final WPI_TalonFX shooterC = RobotMap.mtShootRight2;
+
+  public static Solenoid slndhood = RobotMap.slndHood;
 
   public Subsystem_Shooter() {
 
@@ -40,6 +44,7 @@ public class Subsystem_Shooter extends Subsystem {
       
       shooterA.configFactoryDefault();
       shooterB.configFactoryDefault();
+      shooterC.configFactoryDefault();
       shooterA.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
 
@@ -49,8 +54,13 @@ public class Subsystem_Shooter extends Subsystem {
       shooterB.setInverted(true);
       shooterB.setSensorPhase(true);
 
+      shooterC.setInverted(true);
+      shooterC.setSensorPhase(true);
+
+
       shooterA.setNeutralMode(NeutralMode.Coast);
       shooterB.setNeutralMode(NeutralMode.Coast);
+      shooterC.setNeutralMode(NeutralMode.Coast);
 
 //        shooterA.configClosedLoopPeakOutput(kControlSlot, Constants.kShooterMaxPrecentOutput);
 
@@ -62,14 +72,24 @@ public class Subsystem_Shooter extends Subsystem {
 
       shooterA.clearStickyFaults();
       shooterB.clearStickyFaults();
+      shooterC.clearStickyFaults();
 
       shooterB.follow(shooterA);
+      shooterC.follow(shooterA);
+
+      shooterA.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+      shooterB.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+      shooterC.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+
+
+
+      hoodDown();
   }
 
   @Override
   public void initDefaultCommand() {
     //unless interupted the default command will allow driver to drive with joystick
-    setDefaultCommand(new Command_ai_loop());
+   //setDefaultCommand(new Command_ai_loop());
   }
 
 
@@ -112,6 +132,14 @@ public class Subsystem_Shooter extends Subsystem {
 
 public void set(ControlMode percentoutput, double d) {
 }
+
+public void hoodUp() {
+    slndhood.set(true);
+  }
+
+  public void hoodDown() {
+    slndhood.set(false);
+  }
 }
 
 

@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 //import com.revrobotics.CANEncoder;
@@ -68,7 +69,7 @@ public class Subsystem_Drive extends SubsystemBase {
   //grabs solenoid for gear shifting
   private final Solenoid slndShift = RobotMap.slndGearShifter;
 
-  private DifferentialDriveOdometry odometry;
+  //private DifferentialDriveOdometry odometry;
 
 
 
@@ -105,6 +106,11 @@ public class Subsystem_Drive extends SubsystemBase {
 
     drRobotDrive.setDeadband(0.09); //By default, the Differential Drive class applies an input deadband of .02
 
+
+    mtLeft1.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40); // TAKE A LOOK AT CURRENT LIMITING IMPORTANT
+    mtLeft2.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtRight1.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtRight2.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
     // SmartDashboard.putNumber("dSquareFactor", dSquareFactor);
     // SmartDashboard.putNumber("dThrottleFactor", dThrottleFactor);
   }
@@ -142,7 +148,7 @@ public class Subsystem_Drive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(), getRightDistance());
+    //odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftDistance(), getRightDistance());
     //SmartDashboard.putNumber("Left Distance", getLeftDistance());
     //SmartDashboard.putNumber("Right Distance", getRightDistance());
     //SmartDashboard.putNumber("Heading", getHeading());
@@ -219,7 +225,7 @@ public class Subsystem_Drive extends SubsystemBase {
   }
 
 
-
+  /*
   public Pose2d getPose() {
     return odometry.getPoseMeters();
   }
@@ -227,6 +233,7 @@ public class Subsystem_Drive extends SubsystemBase {
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(getLeftEncRate(), getRightEncRate());
   }
+  */
 
   public double getLeftEncRate() {
     //return leftDriveEnc.getVelocity() / 60 * Constants.FEET_PER_ROTATIONS;
@@ -245,10 +252,12 @@ public class Subsystem_Drive extends SubsystemBase {
     return mtRight1.getSelectedSensorPosition();
   }
 
+  /*
   public void voltageDrive(double leftVolts, double rightVolts) {
     mtLeft1.setVoltage(leftVolts);
     mtRight1.setVoltage(-rightVolts);
   }
+  */
 
   public double getHeading() {
     return Math.IEEEremainder(navx.getAngle(), 360) * (Constants.GYRO_REVERSED ? -1.0 : 1.0);

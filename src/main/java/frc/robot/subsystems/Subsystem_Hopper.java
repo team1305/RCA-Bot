@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -19,14 +22,16 @@ import frc.robot.RobotMap;
 public class Subsystem_Hopper extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public static CANSparkMax mtHopper = RobotMap.mtHopper;
+  public static WPI_TalonFX mtHopper = RobotMap.mtHopper;
 
   public Subsystem_Hopper() {
 
     
-    mtHopper.restoreFactoryDefaults();
-    mtHopper.setIdleMode(IdleMode.kCoast);
-    mtHopper.setOpenLoopRampRate(0.4);
+    mtHopper.configFactoryDefault();
+    mtHopper.setNeutralMode(NeutralMode.Coast);
+    mtHopper.configOpenloopRamp(0.4);
+    mtHopper.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+
 
   }
 
@@ -37,15 +42,15 @@ public class Subsystem_Hopper extends Subsystem {
   }
 
   public void hopperIn(double speed) {
-    mtHopper.set(-speed);    
+    mtHopper.set(ControlMode.PercentOutput, -speed);    
   }
 
   public void hopperOut(double speed) {
 
-    mtHopper.set(speed);
+    mtHopper.set(ControlMode.PercentOutput, speed);
   }
 
   public void hopperStop() {
-    mtHopper.set(0);
+    mtHopper.set(ControlMode.PercentOutput, 0);
   }
 }

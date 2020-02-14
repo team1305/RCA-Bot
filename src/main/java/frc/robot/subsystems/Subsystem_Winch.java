@@ -25,28 +25,32 @@ public class Subsystem_Winch extends Subsystem {
   ////public static CANSparkMax mtWicnh2 = RobotMap.mtWicnh2;
 
   
-  private final WPI_TalonFX mtWicnh1 = RobotMap.mtWicnh1;
-  private final WPI_TalonFX mtWicnh2 = RobotMap.mtWicnh2;
+  private final WPI_TalonFX mtWinch1 = RobotMap.mtWinch1;
+  private final WPI_TalonFX mtWinch2 = RobotMap.mtWinch2;
 
 
 
   
   public Subsystem_Winch() {
 
-    mtWicnh1.setNeutralMode(NeutralMode.Brake);
-    mtWicnh2.setNeutralMode(NeutralMode.Brake);
+    mtWinch1.setNeutralMode(NeutralMode.Brake);
+    mtWinch2.setNeutralMode(NeutralMode.Brake);
 
-    mtWicnh1.configOpenloopRamp(0.4);
-    mtWicnh2.configOpenloopRamp(0.4);
+    mtWinch1.configOpenloopRamp(0.4);
+    mtWinch2.configOpenloopRamp(0.4);
 
-    mtWicnh1.configFactoryDefault();
-    mtWicnh2.configFactoryDefault();
+    mtWinch1.configFactoryDefault();
+    mtWinch2.configFactoryDefault();
 
-    mtWicnh1.setInverted(false);
-    mtWicnh1.setSensorPhase(true);
+    mtWinch1.setInverted(false);
+    mtWinch1.setSensorPhase(true);
 
-    mtWicnh2.setInverted(true);
-    mtWicnh2.setSensorPhase(true);
+    mtWinch2.setInverted(true);
+    mtWinch2.setSensorPhase(true);
+
+    mtWinch1.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtWinch2.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+
 
 
   }
@@ -58,14 +62,17 @@ public class Subsystem_Winch extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
+
   public void WinchSpeed(double speed) {
-    mtWicnh1.set(-speed);
-    mtWicnh2.set(-speed);
+    mtWinch1.set(-speed);
+    mtWinch2.set(-speed);
   }
 
+  
+
   public void stopWinch() {
-    mtWicnh1.set(0);
-    mtWicnh2.set(0);
+    mtWinch1.set(0);
+    mtWinch2.set(0);
   }
 
 }

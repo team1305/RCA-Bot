@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
@@ -20,14 +23,15 @@ public class Subsystem_Elevator extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  public static CANSparkMax mtElevator = RobotMap.mtElevator;
+  public static WPI_TalonFX mtElevator = RobotMap.mtElevator;
 
   public Subsystem_Elevator() {
 
     
-    mtElevator.restoreFactoryDefaults();
-    mtElevator.setIdleMode(IdleMode.kCoast);
-    mtElevator.setOpenLoopRampRate(0.4);
+    mtElevator.configFactoryDefault();
+    mtElevator.setNeutralMode(NeutralMode.Coast);
+    mtElevator.configOpenloopRamp(0.4);
+    mtElevator.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
 
   }
 
@@ -39,15 +43,15 @@ public class Subsystem_Elevator extends Subsystem {
 
 
   public void elevatorUp(double speed) {
-    mtElevator.set(speed);
+    mtElevator.set(ControlMode.PercentOutput, speed);
   }
 
 
   public void elevatorDown(double speed) {
-    mtElevator.set(-speed);
+    mtElevator.set(ControlMode.PercentOutput, -speed);
   }
 
   public void elevatorStop() {
-    mtElevator.set(0);
+    mtElevator.set(ControlMode.PercentOutput, 0);
   }
 }
