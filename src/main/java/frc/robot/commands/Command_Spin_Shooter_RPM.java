@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.Robot;
 
-public class Spin_Shooter_RPM extends Command {
+public class Command_Spin_Shooter_RPM extends Command {
 
   double RPM;
 
-  public Spin_Shooter_RPM(double RPM) {
+  public Command_Spin_Shooter_RPM(double RPM) {
 
     //requires(Robot.shooterrpm);
     requires(Robot.shooter);

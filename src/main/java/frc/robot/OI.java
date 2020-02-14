@@ -16,11 +16,11 @@ import frc.robot.commands.Command_Compressor_ON;
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
 import frc.robot.commands.Command_Shift_Gear;
+import frc.robot.commands.Command_Spin_Shooter_RPM;
 //import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Supply_Balls;
 import frc.robot.commands.Command_Winch_Down;
 import frc.robot.commands.Command_Winch_Up;
-import frc.robot.commands.Spin_Shooter_RPM;
 
 
 
@@ -73,7 +73,7 @@ public class OI {
 
     btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    btn1_X.whileHeld(new Spin_Shooter_RPM(1900));// xbox "X" Button 3
+    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(1900));// xbox "X" Button 3
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
@@ -106,11 +106,11 @@ public class OI {
   
 
    
-    btn2_A.whileHeld(new Command_Intake_Ground());
-    btn2_B.whileHeld(new Command_Intake_Station());
+    //btn2_A.whileHeld(new Command_Intake_Ground());
+    //btn2_B.whileHeld(new Command_Intake_Station());
     //btn2_X.whileHeld(new Command_Limelight_Initiation_Line());
     //btn2_RB.whileHeld(new Command_Spin_Shooter());
-    btn2_LB.whileHeld(new Command_Supply_Balls());
+    //btn2_LB.whileHeld(new Command_Supply_Balls());
      
 
     //btn2_Back.whileHeld(new Command_Unwinch());//xbox "Back" Button 7
