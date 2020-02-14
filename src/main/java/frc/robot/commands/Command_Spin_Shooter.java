@@ -26,7 +26,7 @@ public class Command_Spin_Shooter extends Command {
   @Override
   protected void execute() {
     //bIsFinished = false;
-    Robot.shooter.setShooterRPM(2000);//THIS IS THE VALUE YOU WANT TO CHANGE FOR SHOOTER SPEED
+    Robot.shooter.setShooterSpeed(0.1);//THIS IS THE VALUE YOU WANT TO CHANGE FOR SHOOTER SPEED
     
     //bIsFinished = true;
 
@@ -42,7 +42,7 @@ public class Command_Spin_Shooter extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.shooter.setShooterRPM(0);   
+    Robot.shooter.setShooterSpeed(0);   
   }
 
   // Called when another command which requires one or more of the same
