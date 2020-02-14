@@ -16,6 +16,7 @@ import frc.robot.commands.Command_Compressor_ON;
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
 import frc.robot.commands.Command_Shift_Gear;
+import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Spin_Shooter_RPM;
 //import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Supply_Balls;
@@ -73,11 +74,11 @@ public class OI {
 
     btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(1900));// xbox "X" Button 3
+    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(20));// xbox "X" Button 3
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
-    //btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5
+    btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5
     
     //btn1_RB.whileHeld(new Hopper_Out());//xbox "RB" Button 6
 
