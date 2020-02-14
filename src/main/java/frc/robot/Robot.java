@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    generateTrajectories();
+    //generateTrajectories();
 
     //resets the encoder on initialize
     //Robot.tower.resetEncoder();
@@ -160,12 +160,13 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-
+  /*
   public static void generateTrajectories() {
 
     paths.put("Gather", GatherFromTrench.generate());
     SmartDashboard.putBoolean("Paths Generated", true);
   }
+  */
 
   public Subsystem_Drive getDrive() {
     return drive;
