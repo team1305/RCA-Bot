@@ -13,11 +13,8 @@ import frc.robot.subsystems.Subsystem_Drive;
 
 public class Command_Drive_With_Joystick extends Command {
   public Command_Drive_With_Joystick() {
-
-    addrequirements(Robot.drive);
-  }
-
-  private void addrequirements(Subsystem_Drive drive) {
+    
+    requires(Robot.drive);
   }
 
   // Called just before this Command runs the first time
