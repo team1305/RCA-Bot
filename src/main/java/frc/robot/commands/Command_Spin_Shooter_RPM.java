@@ -47,7 +47,7 @@ public class Command_Spin_Shooter_RPM extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.shooter.setShooterRPM(0);
+    Robot.shooter.setShooterSpeed(0);
 
 
   }
