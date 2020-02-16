@@ -30,7 +30,7 @@ public class Subsystem_Hopper extends Subsystem {
     mtHopper.configFactoryDefault();
     mtHopper.setNeutralMode(NeutralMode.Coast);
     mtHopper.configOpenloopRamp(0.4);
-    mtHopper.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtHopper.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 30);
 
 
   }
@@ -42,12 +42,12 @@ public class Subsystem_Hopper extends Subsystem {
   }
 
   public void hopperIn(double speed) {
-    mtHopper.set(ControlMode.PercentOutput, -speed);    
+    mtHopper.set(ControlMode.PercentOutput, speed);    
   }
 
   public void hopperOut(double speed) {
 
-    mtHopper.set(ControlMode.PercentOutput, speed);
+    mtHopper.set(ControlMode.PercentOutput, -speed);
   }
 
   public void hopperStop() {

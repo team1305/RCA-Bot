@@ -31,7 +31,7 @@ public class Subsystem_Elevator extends Subsystem {
     mtElevator.configFactoryDefault();
     mtElevator.setNeutralMode(NeutralMode.Coast);
     mtElevator.configOpenloopRamp(0.4);
-    mtElevator.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtElevator.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 30);
 
   }
 

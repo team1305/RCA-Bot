@@ -34,7 +34,7 @@ public class Subsystem_Intake extends Subsystem {
     mtIntake.configFactoryDefault();
     mtIntake.setNeutralMode(NeutralMode.Coast);
     mtIntake.configOpenloopRamp(0.4);
-    mtIntake.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtIntake.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 30);
 
   }
 
@@ -45,12 +45,12 @@ public class Subsystem_Intake extends Subsystem {
   }
 
   public void enableIntake(double speed) {
-    mtIntake.set(ControlMode.PercentOutput, -speed);
+    mtIntake.set(ControlMode.PercentOutput, speed);
 
   }
 
   public void reverseIntake(double speed) {
-    mtIntake.set(ControlMode.PercentOutput, speed);
+    mtIntake.set(ControlMode.PercentOutput, -speed);
   }
 
   public void stopIntake() {
