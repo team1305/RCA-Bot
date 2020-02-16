@@ -21,19 +21,22 @@ import frc.robot.subsystems.Subsystem_Drive;
 public class Command_ai_loop extends Command {
 
   private String cstate;
-  private double Kp = -0.01f;
-  private double Ki = 0.0f;
+  /*
+  private double Kp = -0.03f;
+  private double Ki = 0.012f; // 0.006
   private double Kf = 0.05f;  //feedforward - minimum command signal
   private double left_command;
   private double right_command;
+  */
+  private double x, thor;
   private int izone, irpm;
   private boolean btarget;
   private double zone1threshold = 50; //  pixel width
   public double distance;
   private int iloops = 0;
   
+  private int isuccess = 0; 
 
-  private double x, thor; //Limelight Values
     
   public Command_ai_loop() {
     requires(Robot.shooter);
@@ -57,6 +60,7 @@ public class Command_ai_loop extends Command {
     izone = 1;
     irpm = 0;
     btarget = false;
+    isuccess = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -68,7 +72,7 @@ public class Command_ai_loop extends Command {
      if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  {
 
       if (iloops <= 50){
-        Robot.led.setYellow();
+        Robot.led.setWhite();
         iloops = iloops +1;
         
       }
@@ -88,7 +92,7 @@ public class Command_ai_loop extends Command {
       //When game data is blank, and intake is on
       else if (Robot.intake.isIntakeOn() && (getGamedata() == "")){
 
-      Robot.led.setYellow();
+      Robot.led.setWhite();
 
       }
 
@@ -96,7 +100,7 @@ public class Command_ai_loop extends Command {
      //When target is aquired and game data isn't blank 
      else if (Robot.limelight.is_Target() && (getGamedata() != "")){
       if (iloops <= 50){
-        Robot.led.setGreen();
+        Robot.led.setViolet();
         iloops = iloops +1;
         
       }
@@ -115,7 +119,7 @@ public class Command_ai_loop extends Command {
 
      //When target is aquired and game data is blank 
       else if (Robot.limelight.is_Target() && (getGamedata() == "")){
-      Robot.led.setGreen();
+      Robot.led.setViolet();
      }
 
      else {
@@ -124,19 +128,22 @@ public class Command_ai_loop extends Command {
 
     
 
-
-
+     
 
 
 
      //Vision tracking code, activates when right bumper is pressed
-     if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
-        
+     if (Robot.oi.getJoystickDriver().getRawButton(5)) { // Driver LB
+      
+
       //Limelight turn to target
        switch (cstate) {  
        case "HUNT" : 
          // Use Limelight to move to target
          Robot.drive.LowGear();
+
+         distance = Robot.limelight.getDistance();
+         SmartDashboard.putNumber("thedistance", distance);
 
 
          thor = Robot.limelight.get_Thor();
@@ -146,46 +153,13 @@ public class Command_ai_loop extends Command {
          if (Robot.limelight.is_Target()) {
 
 
-
-            left_command = Robot.drive.getLeftSide();
-            right_command = Robot.drive.getRightSide();
-     
-            double heading_error = -x;
-            double steering_adjust = 0.0f;
-                 if (x > 1.5)
-                 {
-                         steering_adjust = Kp*heading_error - Kf;
-                 }
-                 else if (x < -1.5)
-                 {
-                         steering_adjust = Kp*heading_error + Kf;
-                 }
-     
-     
-            left_command += steering_adjust;
-            right_command -= steering_adjust;
-     
-            SmartDashboard.putNumber("Left Command", left_command);
-            SmartDashboard.putNumber("Right Command", right_command);
-            SmartDashboard.putNumber("Steering Adjust", steering_adjust);
-            SmartDashboard.putNumber("X", x);
-     
-     
-            if (left_command > 0.75){
-              left_command = 0.75;
-            }
-     
-            if (right_command > 0.75){
-              right_command = 0.75;
-            }
-     
-            Robot.drive.setLeftSide(-left_command);
-            Robot.drive.setRightSide(right_command);
+           Robot.limelight.turnRobotToAnlge(); 
              
-            
+
             if (Math.abs(x) <= 1.5){
                // Calc Distance away so we know zone 1 or zone 2
 
+               isuccess = isuccess + 1;
               
               izone = 1; // default
               /*
@@ -199,8 +173,12 @@ public class Command_ai_loop extends Command {
               */
 
               distance = Robot.limelight.getDistance();
+              SmartDashboard.putNumber("thedistance", distance );
+
               if (distance > 0){
+                if (isuccess >= 5) {
                 cstate = "SHOOT";
+                }
               }
             }
               
@@ -209,32 +187,37 @@ public class Command_ai_loop extends Command {
          //Check hood angle, and shooter speed based on zone
          break;
         case "SHOOT" : 
-           if (distance <=60){
-             Robot.shooter.hoodUp();
-             irpm = 6000;
+           
+
+           isuccess = 0;
+
+           if (distance <=120){
+             Robot.shooter.hoodDown();
+             irpm = 4000;
            }
 
-           else if ((distance > 60) && (distance <= 90)){
-             irpm = 6250;
+           else if ((distance > 120) && (distance <= 160)){
+             irpm = 4000;
              Robot.shooter.hoodDown();
              
            }
 
-           else if ((distance > 90) && (distance <= 120)){
-             irpm = 6500;
-             Robot.shooter.hoodDown();
+           else if ((distance > 160) && (distance <= 240)){
+             irpm = 5500;
+             Robot.shooter.hoodUp();
            }
 
            else{
-             irpm = 6750;
-             Robot.shooter.hoodDown();
+             irpm = 6000;
+             Robot.shooter.hoodUp();
            }
 
            // Fire up the Shooter
            Robot.shooter.setShooterRPM(irpm);
            
            SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
-           
+           SmartDashboard.putNumber("thedistance", distance );
+
            if (Robot.shooter.getShooterRPM() >= irpm) {
               // We are at speed, Turn on feeders 
               Robot.elevator.elevatorUp(0.3);
