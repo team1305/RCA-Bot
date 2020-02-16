@@ -52,10 +52,28 @@ public class RobotMap {
    public final static StatorCurrentLimitConfiguration currentLimitConfig30 = new StatorCurrentLimitConfiguration(true, 30, 29.95, 1);
     
   //Shooter PID values
-     public static final double kP_SHOOTER = 0.09;  //0.085
-     public static final double kI_SHOOTER = 0.0;
-     public static final double kD_SHOOTER = 0.0;
-     public static final double kF_SHOOTER = 0.0512;
+     public static final double kP_SHOOTER_INFRONT_OF_LINE = 0.09;  //0.085
+     public static final double kI_SHOOTER_INFRONT_OF_LINE = 0;
+     public static final double kD_SHOOTER_INFRONT_OF_LINE = 0;
+     public static final double kF_SHOOTER_INFRONT_OF_LINE = 0.0512;
+
+     public static final double kP_SHOOTER_INITIATION_LINE = 0.095;
+     public static final double kI_SHOOTER_INITIATION_LINE = 0;
+     public static final double kD_SHOOTER_INITIATION_LINE = 0;
+     public static final double kF_SHOOTER_INITIATION_LINE = 0.0512;
+
+     public static final double kP_SHOOTER_TRENCH = 0.09;
+     public static final double kI_SHOOTER_TRENCH = 0;
+     public static final double kD_SHOOTER_TRENCH = 0;
+     public static final double kF_SHOOTER_TRENCH = 0.0512;
+
+     public static final double kP_SHOOTER_TRENCH_BACK = 0.09;
+     public static final double kI_SHOOTER_TRENCH_BACK = 0;
+     public static final double kD_SHOOTER_TRENCH_BACK = 0;
+     public static final double kF_SHOOTER_TRENCH_BACK = 0.0512;
+
+
+
      public static final int kIZone_SHOOTER = 200;
      public static final double SHOOTER_OUTPUT_TO_ENCODER_RATIO = 0.77; //Previous 3.0 Because 3 revolutions of the encoder was one revolution of the wheels, 24.0/36.0
      public static final double TICKS_PER_ROTATION = 2048.0;
