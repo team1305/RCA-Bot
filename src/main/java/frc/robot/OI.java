@@ -110,7 +110,7 @@ public class OI {
    
     btn2_A.whileHeld(new Command_Intake_Ground());
     btn2_B.whileHeld(new Command_Puke());
-    btn2_X.whenPressed(new Command_Spin_Shooter_RPM(4000, true));
+    btn2_X.whileHeld(new Command_Spin_Shooter_RPM(4000, true));
     btn2_RB.whenPressed(new Command_Hood_Down());
     btn2_Y.whileHeld(new Command_Intake_Station());
     btn2_LB.whileHeld(new Command_Hood_Up());
