@@ -37,8 +37,31 @@ public class Subsystem_Shooter extends Subsystem {
   private final WPI_TalonFX shooterC = RobotMap.mtShootRight2;
 
   public static Solenoid slndhood = RobotMap.slndHood;
+  private double kP_Shooter;
+  private double kI_Shooter;
+  private double kD_Shooter;
+  private double kF_Shooter;
+
+  /*
+  private double kP_Shooter_Adj;
+  private double kI_Shooter_Adj;
+  private double kD_Shooter_Adj;
+  private double kF_Shooter_Adj;
+  */
+
+  
 
   public Subsystem_Shooter() {
+
+    kP_Shooter = RobotMap.kP_SHOOTER;
+    kI_Shooter = RobotMap.kI_SHOOTER;
+    kD_Shooter = RobotMap.kD_SHOOTER;
+    kF_Shooter = RobotMap.kF_SHOOTER;
+
+    //kP_Shooter_Adj = RobotMap.kP_SHOOTER;
+    //kI_Shooter_Adj = RobotMap.kI_SHOOTER;
+    //kD_Shooter_Adj = RobotMap.kD_SHOOTER;
+    //kF_Shooter_Adj = RobotMap.kF_SHOOTER;
 
       
       
@@ -54,7 +77,7 @@ public class Subsystem_Shooter extends Subsystem {
       shooterB.setInverted(true);
       shooterB.setSensorPhase(true);
 
-      shooterC.setInverted(true);
+      shooterC.setInverted(false);
       shooterC.setSensorPhase(true);
 
 
@@ -62,7 +85,7 @@ public class Subsystem_Shooter extends Subsystem {
       shooterB.setNeutralMode(NeutralMode.Coast);
       shooterC.setNeutralMode(NeutralMode.Coast);
 
-//        shooterA.configClosedLoopPeakOutput(kControlSlot, Constants.kShooterMaxPrecentOutput);
+    //        shooterA.configClosedLoopPeakOutput(kControlSlot, Constants.kShooterMaxPrecentOutput);
 
       shooterA.config_kP(0, RobotMap.kP_SHOOTER);
       shooterA.config_kI(0, RobotMap.kI_SHOOTER);
@@ -81,6 +104,7 @@ public class Subsystem_Shooter extends Subsystem {
       shooterB.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
       shooterC.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
 
+      
 
 
       hoodDown();
@@ -89,8 +113,45 @@ public class Subsystem_Shooter extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //unless interupted the default command will allow driver to drive with joystick
-   //setDefaultCommand(new Command_ai_loop());
+   setDefaultCommand(new Command_ai_loop());
   }
+
+  public boolean getPidFromDashboard(){
+    //kP_Shooter_Adj = SmartDashboard.getNumber("Shooter P", kP_Shooter_Adj);
+    //kI_Shooter_Adj = SmartDashboard.getNumber("Shooter I", kI_Shooter_Adj);
+    //kD_Shooter_Adj = SmartDashboard.getNumber("Shooter D", kD_Shooter_Adj);
+    //kF_Shooter_Adj = SmartDashboard.getNumber("Shooter F", kF_Shooter_Adj);
+    return true;
+  }
+  /*
+  public boolean compareUpdatePid(){
+      if (kP_Shooter_Adj != kP_Shooter){
+        kP_Shooter = kP_Shooter_Adj;
+        shooterA.config_kP(0, kP_Shooter);
+      }
+      if (kI_Shooter_Adj != kI_Shooter){
+        kI_Shooter = kI_Shooter_Adj;
+        shooterA.config_kI(0, kI_Shooter);
+      }
+      if (kD_Shooter_Adj != kD_Shooter){
+        kD_Shooter = kD_Shooter_Adj;
+        shooterA.config_kD(0, kD_Shooter);
+      }
+      if (kF_Shooter_Adj != kF_Shooter){
+        kF_Shooter = kF_Shooter_Adj;
+        shooterA.config_kF(0, kF_Shooter);
+      }
+
+      return true; 
+  }
+  */
+
+
+
+
+
+
+
 
 
   public void setShooterSpeed(double speed) {
