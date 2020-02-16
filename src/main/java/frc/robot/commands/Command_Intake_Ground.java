@@ -16,7 +16,7 @@ public class Command_Intake_Ground extends Command {
     // eg. requires(chassis);
     requires(Robot.intake);
     requires(Robot.hopper);
-    requires(Robot.elevator);
+    //requires(Robot.elevator);
     requires(Robot.shooter);
   }
 
@@ -31,7 +31,7 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.extendIntake();
     Robot.intake.enableIntake(0.5);
     Robot.hopper.hopperIn(0.5);
-    Robot.elevator.elevatorUp(0.5);
+    //Robot.elevator.elevatorUp(0.5);
     
 
   }
@@ -48,7 +48,7 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.retractIntake();
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
-    Robot.elevator.elevatorStop();
+    //Robot.elevator.elevatorStop();
 
   }
 
@@ -59,7 +59,7 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.retractIntake();
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
-    Robot.elevator.elevatorStop();
+    //Robot.elevator.elevatorStop();
 
   }
 }

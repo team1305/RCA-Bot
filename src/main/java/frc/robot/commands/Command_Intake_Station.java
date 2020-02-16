@@ -28,6 +28,8 @@ public class Command_Intake_Station extends Command {
   protected void execute() {
     Robot.intake.reverseIntake(0.5);
     Robot.hopper.hopperIn(0.5);
+    Robot.intake.extendIntake();
+    Robot.elevator.elevatorUp(0.5);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,6 +43,8 @@ public class Command_Intake_Station extends Command {
   protected void end() {
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
+    Robot.intake.retractIntake();
+    Robot.elevator.elevatorUp(0);
   }
 
 
@@ -50,5 +54,7 @@ public class Command_Intake_Station extends Command {
   protected void interrupted() {
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
+    Robot.intake.retractIntake();
+    Robot.elevator.elevatorUp(0);
   }
 }
