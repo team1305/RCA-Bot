@@ -21,6 +21,12 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
 
+
+	//Limelight PID and Constants
+	public static final double LIMELIGHT_KP = -0.03f;
+	public static final double LIMELIGHT_KI = 0.012f; // 0.006
+	public static final double LIMELIGHT_KF = 0.05f;  //feedforward - minimum command signal
+	
 	/*
 	public static final int FRONT_LEFT_DRIVE_CAN = 0;
 	public static final int MID_LEFT_DRIVE_CAN = 1;
@@ -86,7 +92,6 @@ public final class Constants {
     public static final double kRamseteB = 2;
 	public static final double kRamseteZeta = 0.7;
 	
-
 
 
 
