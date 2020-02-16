@@ -72,17 +72,17 @@ public class OI {
   public OI() {
  
     // Primary Driver Stick
-    btn1_A.whileHeld(new Command_Winch_Up());//xbox "A" Button 1
+    //btn1_A.whileHeld(new Command_Winch_Up());//xbox "A" Button 1
 
-    btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
+    //btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(5500, true));// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
+    //btn1_X.whileHeld(new Command_Spin_Shooter_RPM(5500, true));// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
-    //btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5, this is the tracking
+    //btn1_LB.whileHeld(new Command_Supply_Balls());//xbox "LB" Button 5, this is the tracking
     
-    btn1_RB.whileHeld(new Command_Supply_Balls());//xbox "RB" Button 6
+    //btn1_RB.whileHeld(new Command_Supply_Balls());//xbox "RB" Button 6
 
     btn1_Back.whenPressed(new Command_Compressor_OFF());//xbox "Back" Button 7
 
@@ -106,15 +106,14 @@ public class OI {
 
     // Secondary Driver Stick
     
-  
 
    
     btn2_A.whileHeld(new Command_Intake_Ground());
-    btn2_B.whileHeld(new Command_Intake_Station());
-    btn2_X.whenPressed(new Command_Hood_Up());
+    btn2_B.whileHeld(new Command_Puke());
+    btn2_X.whenPressed(new Command_Spin_Shooter_RPM(4000, true));
     btn2_RB.whenPressed(new Command_Hood_Down());
-    btn2_Y.whileHeld(new Command_Spin_Shooter_RPM(4000, true));
-    btn2_LB.whileHeld(new Command_Supply_Balls());
+    btn2_Y.whileHeld(new Command_Intake_Station());
+    btn2_LB.whileHeld(new Command_Hood_Up());
      
 
     //btn2_Back.whileHeld(new Command_Unwinch());//xbox "Back" Button 7
