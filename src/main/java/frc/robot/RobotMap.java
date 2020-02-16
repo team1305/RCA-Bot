@@ -22,6 +22,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotMap {
 
@@ -40,17 +41,18 @@ public class RobotMap {
   public static WPI_TalonFX mtElevator = new WPI_TalonFX(6);
   public static WPI_TalonFX mtHopper = new WPI_TalonFX(5);
 
-  public static WPI_TalonFX mtWinch1 = new WPI_TalonFX(10);
-  public static WPI_TalonFX mtWinch2 = new WPI_TalonFX(9);
+  public static WPI_TalonFX mtWinch1 = new WPI_TalonFX(9);
+  public static WPI_TalonFX mtWinch2 = new WPI_TalonFX(10);
 
 
-  public static CANSparkMax mtLed = new CANSparkMax(20, MotorType.kBrushless);
+  public static CANSparkMax mtLed = new CANSparkMax(9, MotorType.kBrushless);
 
 
-  public final static StatorCurrentLimitConfiguration currentLimitConfig = new StatorCurrentLimitConfiguration(true, 40, 39.95, 1);
-
-     //Shooter PID values
-     public static final double kP_SHOOTER = 0.085;
+   public final static StatorCurrentLimitConfiguration currentLimitConfig = new StatorCurrentLimitConfiguration(true, 40, 39.95, 1);
+   public final static StatorCurrentLimitConfiguration currentLimitConfig30 = new StatorCurrentLimitConfiguration(true, 30, 29.95, 1);
+    
+  //Shooter PID values
+     public static final double kP_SHOOTER = 0.09;  //0.085
      public static final double kI_SHOOTER = 0.0;
      public static final double kD_SHOOTER = 0.0;
      public static final double kF_SHOOTER = 0.0512;
@@ -79,7 +81,7 @@ public class RobotMap {
   //public static CANifier RGBLEDController = new CANifier(20);
 
   //declares compressor port
-  public static Compressor cmpRobotCompressor = new Compressor(21);
+  public static Compressor cmpRobotCompressor = new Compressor(0);
 
   //declares digital id for tower motor 
   //public static WPI_TalonSRX mtTowerRotate = new WPI_TalonSRX(0);
@@ -90,20 +92,17 @@ public class RobotMap {
   public static Solenoid slndIntake =  new Solenoid(4);
 
   public static Solenoid slndHood =  new Solenoid(5);
-  /*
-  public static Solenoid slndTowerStage2 = new Solenoid(6);
-  public static Solenoid slndIntakeMove = new Solenoid(2);
-  public static Solenoid slndHatchIntake = new Solenoid(4);
-  public static Solenoid slndHatchKickers = new Solenoid(7);
-  public static Solenoid slndClimbRelease = new Solenoid(1);
-  public static Solenoid slndTowerLEDs = new Solenoid(0);
-  public static Solenoid slndRearLift = new Solenoid(5);
-  */
+
+
 
   //runs on initialize
   public static void init() {    
 
   }
 
+
+
 }
+
+
 
