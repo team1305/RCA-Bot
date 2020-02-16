@@ -12,9 +12,11 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.Command_Compressor_OFF;
 import frc.robot.commands.Command_Compressor_ON;
-
+import frc.robot.commands.Command_Hood_Down;
+import frc.robot.commands.Command_Hood_Up;
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
+import frc.robot.commands.Command_Puke;
 import frc.robot.commands.Command_Shift_Gear;
 import frc.robot.commands.Command_Spin_Shooter;
 import frc.robot.commands.Command_Spin_Shooter_RPM;
@@ -74,13 +76,13 @@ public class OI {
 
     btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(20));// xbox "X" Button 3
+    btn1_X.whileHeld(new Command_Spin_Shooter_RPM(5500, true));// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
-    btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5
+    //btn1_LB.whileHeld(new Command_Spin_Shooter());//xbox "LB" Button 5, this is the tracking
     
-    //btn1_RB.whileHeld(new Hopper_Out());//xbox "RB" Button 6
+    btn1_RB.whileHeld(new Command_Supply_Balls());//xbox "RB" Button 6
 
     btn1_Back.whenPressed(new Command_Compressor_OFF());//xbox "Back" Button 7
 
@@ -88,7 +90,7 @@ public class OI {
 
     btn1_LS.whenPressed(new Command_Shift_Gear());//xbox "Left Stick Click" Button 9
 
-    //btn1_RS.whileHeld(new Command_Limelight_Initiation_Line());//xbox "Right Stick Click" Button 10
+    //btn1_RS.whileHeld(new Command_Supply_Balls());//xbox "Right Stick Click" Button 10
 
     //xbox "X Axis" Left Stick - 
     ////xbox "Y Axis" Left Stick - Drive Forward and Reverse
@@ -107,11 +109,12 @@ public class OI {
   
 
    
-    //btn2_A.whileHeld(new Command_Intake_Ground());
-    //btn2_B.whileHeld(new Command_Intake_Station());
-    //btn2_X.whileHeld(new Command_Limelight_Initiation_Line());
-    //btn2_RB.whileHeld(new Command_Spin_Shooter());
-    //btn2_LB.whileHeld(new Command_Supply_Balls());
+    btn2_A.whileHeld(new Command_Intake_Ground());
+    btn2_B.whileHeld(new Command_Intake_Station());
+    btn2_X.whenPressed(new Command_Hood_Up());
+    btn2_RB.whenPressed(new Command_Hood_Down());
+    btn2_Y.whileHeld(new Command_Spin_Shooter_RPM(4000, true));
+    btn2_LB.whileHeld(new Command_Supply_Balls());
      
 
     //btn2_Back.whileHeld(new Command_Unwinch());//xbox "Back" Button 7
