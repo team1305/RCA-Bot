@@ -28,8 +28,8 @@ public class Command_Supply_Balls extends Command {
   @Override
   protected void execute() {
     Robot.elevator.elevatorUp(0.3);
-    Robot.hopper.hopperOut(0.3);
-    Robot.intake.enableIntake(0.3);
+    Robot.hopper.hopperOut(0.2);
+    Robot.intake.enableIntake(0.2);
   }
 
   // Make this return true when this Command no longer needs to run execute()
