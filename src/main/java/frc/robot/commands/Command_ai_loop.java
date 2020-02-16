@@ -21,13 +21,14 @@ import frc.robot.subsystems.Subsystem_Drive;
 public class Command_ai_loop extends Command {
 
   private String cstate;
-  /*
+  
   private double Kp = -0.03f;
   private double Ki = 0.012f; // 0.006
   private double Kf = 0.05f;  //feedforward - minimum command signal
+  
   private double left_command;
   private double right_command;
-  */
+  
   private double x, thor;
   private int izone, irpm;
   private boolean btarget;
@@ -133,7 +134,7 @@ public class Command_ai_loop extends Command {
 
 
      //Vision tracking code, activates when right bumper is pressed
-     if (Robot.oi.getJoystickDriver().getRawButton(5)) { // Driver LB
+     if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
       
 
       //Limelight turn to target
@@ -153,7 +154,40 @@ public class Command_ai_loop extends Command {
          if (Robot.limelight.is_Target()) {
 
 
-           Robot.limelight.turnRobotToAnlge(); 
+          left_command = Robot.drive.getLeftSide();
+          right_command = Robot.drive.getRightSide();
+    
+          double heading_error = -x;
+          double steering_adjust = 0.0f;
+               if (x > 1.5)
+               {
+                       steering_adjust = Kp*heading_error + Kf;
+               }
+               else if (x < -1.5)
+               {
+                       steering_adjust = Kp*heading_error - Kf;
+               }
+    
+    
+          left_command += steering_adjust;
+          right_command -= steering_adjust;
+    
+          SmartDashboard.putNumber("Left Command", left_command);
+          SmartDashboard.putNumber("Right Command", right_command);
+          SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+          SmartDashboard.putNumber("X", x);
+    
+    
+          if (left_command > 0.75){
+            left_command = 0.75;
+          }
+    
+          if (right_command > 0.75){
+            right_command = 0.75;
+          }
+    
+          Robot.drive.setLeftSide(-left_command);
+          Robot.drive.setRightSide(right_command); 
              
 
             if (Math.abs(x) <= 1.5){
@@ -178,7 +212,9 @@ public class Command_ai_loop extends Command {
               if (distance > 0){
                 if (isuccess >= 5) {
                 cstate = "SHOOT";
+                
                 }
+                SmartDashboard.putNumber("isuccess", isuccess);
               }
             }
               
@@ -194,26 +230,34 @@ public class Command_ai_loop extends Command {
            if (distance <=120){
              Robot.shooter.hoodDown();
              irpm = 4000;
+             Robot.shooter.setShooterPIDInfrontOfLine();
+
            }
 
-           else if ((distance > 120) && (distance <= 160)){
+           else if ((distance > 120) && (distance <= 259)){
              irpm = 4000;
+
              Robot.shooter.hoodDown();
+             Robot.shooter.setShooterPIDInitiationLine();
              
            }
 
-           else if ((distance > 160) && (distance <= 240)){
+           else if ((distance > 259) && (distance <= 450)){
              irpm = 5500;
              Robot.shooter.hoodUp();
+             Robot.shooter.setShooterPIDTrench();
            }
 
+
            else{
-             irpm = 6000;
+             irpm = 5500;
              Robot.shooter.hoodUp();
+             Robot.shooter.setShooterPIDTrenchBack();
            }
 
            // Fire up the Shooter
            Robot.shooter.setShooterRPM(irpm);
+           SmartDashboard.putNumber("irpm", irpm);
            
            SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
            SmartDashboard.putNumber("thedistance", distance );
