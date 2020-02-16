@@ -67,9 +67,10 @@ public class Subsystem_Limelight extends Subsystem {
     double angle_of_limelight = 25; // Degrees
 
     if (is_Target()){
-      double tanValue = Math.tan(angle_of_limelight + get_Ty());
+      double tanValue = Math.tan((angle_of_limelight + get_Ty())*(Math.PI/180));
       SmartDashboard.putNumber("Tan Value", tanValue);
-      distance = (height_of_target - height_of_limelight) / Math.tan(angle_of_limelight + get_Ty());
+      SmartDashboard.putNumber("The angle", angle_of_limelight + get_Ty());
+      distance = (height_of_target - height_of_limelight) / Math.tan((angle_of_limelight + get_Ty())*(Math.PI/180));
       distance = Math.abs(distance);
     }
     return distance;
