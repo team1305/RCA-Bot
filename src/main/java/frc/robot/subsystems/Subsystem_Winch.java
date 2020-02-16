@@ -33,23 +33,25 @@ public class Subsystem_Winch extends Subsystem {
   
   public Subsystem_Winch() {
 
+    mtWinch1.configFactoryDefault();
+    mtWinch2.configFactoryDefault();
+
     mtWinch1.setNeutralMode(NeutralMode.Brake);
     mtWinch2.setNeutralMode(NeutralMode.Brake);
 
     mtWinch1.configOpenloopRamp(0.4);
     mtWinch2.configOpenloopRamp(0.4);
 
-    mtWinch1.configFactoryDefault();
-    mtWinch2.configFactoryDefault();
-
-    mtWinch1.setInverted(false);
+    mtWinch1.setInverted(true);
     mtWinch1.setSensorPhase(true);
 
-    mtWinch2.setInverted(true);
+    mtWinch2.setInverted(false);
     mtWinch2.setSensorPhase(true);
 
-    mtWinch1.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
-    mtWinch2.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
+    mtWinch1.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 40);
+    mtWinch2.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 40);
+
+    mtWinch2.follow(mtWinch1);
 
 
 
@@ -64,8 +66,8 @@ public class Subsystem_Winch extends Subsystem {
 
 
   public void WinchSpeed(double speed) {
-    mtWinch1.set(-speed);
-    mtWinch2.set(-speed);
+    mtWinch1.set(speed);
+    mtWinch2.set(speed);
   }
 
   
