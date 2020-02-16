@@ -53,10 +53,10 @@ public class Subsystem_Shooter extends Subsystem {
 
   public Subsystem_Shooter() {
 
-    kP_Shooter = RobotMap.kP_SHOOTER;
-    kI_Shooter = RobotMap.kI_SHOOTER;
-    kD_Shooter = RobotMap.kD_SHOOTER;
-    kF_Shooter = RobotMap.kF_SHOOTER;
+    kP_Shooter = RobotMap.kP_SHOOTER_INFRONT_OF_LINE;
+    kI_Shooter = RobotMap.kI_SHOOTER_INFRONT_OF_LINE;
+    kD_Shooter = RobotMap.kD_SHOOTER_INFRONT_OF_LINE;
+    kF_Shooter = RobotMap.kF_SHOOTER_INFRONT_OF_LINE;
 
     //kP_Shooter_Adj = RobotMap.kP_SHOOTER;
     //kI_Shooter_Adj = RobotMap.kI_SHOOTER;
@@ -87,10 +87,10 @@ public class Subsystem_Shooter extends Subsystem {
 
     //        shooterA.configClosedLoopPeakOutput(kControlSlot, Constants.kShooterMaxPrecentOutput);
 
-      shooterA.config_kP(0, RobotMap.kP_SHOOTER);
-      shooterA.config_kI(0, RobotMap.kI_SHOOTER);
-      shooterA.config_kD(0, RobotMap.kD_SHOOTER);
-      shooterA.config_kF(0, RobotMap.kF_SHOOTER);
+      shooterA.config_kP(0, RobotMap.kP_SHOOTER_INFRONT_OF_LINE);
+      shooterA.config_kI(0, RobotMap.kI_SHOOTER_INFRONT_OF_LINE);
+      shooterA.config_kD(0, RobotMap.kD_SHOOTER_INFRONT_OF_LINE);
+      shooterA.config_kF(0, RobotMap.kF_SHOOTER_INFRONT_OF_LINE);
       shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
 
       shooterA.clearStickyFaults();
@@ -145,9 +145,37 @@ public class Subsystem_Shooter extends Subsystem {
       return true; 
   }
   */
+  public void setShooterPIDInfrontOfLine(){
+    shooterA.config_kP(0, RobotMap.kP_SHOOTER_INFRONT_OF_LINE);
+    shooterA.config_kI(0, RobotMap.kI_SHOOTER_INFRONT_OF_LINE);
+    shooterA.config_kD(0, RobotMap.kD_SHOOTER_INFRONT_OF_LINE);
+    shooterA.config_kF(0, RobotMap.kF_SHOOTER_INFRONT_OF_LINE);
+    shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
+}
 
+  public void setShooterPIDInitiationLine(){
+      shooterA.config_kP(0, RobotMap.kP_SHOOTER_INITIATION_LINE);
+      shooterA.config_kI(0, RobotMap.kI_SHOOTER_INITIATION_LINE);
+      shooterA.config_kD(0, RobotMap.kD_SHOOTER_INITIATION_LINE);
+      shooterA.config_kF(0, RobotMap.kF_SHOOTER_INITIATION_LINE);
+      shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
+  }
 
+  public void setShooterPIDTrench(){
+    shooterA.config_kP(0, RobotMap.kP_SHOOTER_TRENCH);
+    shooterA.config_kI(0, RobotMap.kI_SHOOTER_TRENCH);
+    shooterA.config_kD(0, RobotMap.kD_SHOOTER_TRENCH);
+    shooterA.config_kF(0, RobotMap.kF_SHOOTER_TRENCH);
+    shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
+}
 
+public void setShooterPIDTrenchBack(){
+  shooterA.config_kP(0, RobotMap.kP_SHOOTER_TRENCH_BACK);
+  shooterA.config_kI(0, RobotMap.kI_SHOOTER_TRENCH_BACK);
+  shooterA.config_kD(0, RobotMap.kD_SHOOTER_TRENCH_BACK);
+  shooterA.config_kF(0, RobotMap.kF_SHOOTER_TRENCH_BACK);
+  shooterA.config_IntegralZone(0, RobotMap.kIZone_SHOOTER);
+}
 
 
 
