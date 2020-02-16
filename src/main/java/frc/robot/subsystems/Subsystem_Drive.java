@@ -96,10 +96,10 @@ public class Subsystem_Drive extends Subsystem {
     mtRight1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
 
-    mtLeft1.configOpenloopRamp(0.4);
-    mtLeft2.configOpenloopRamp(0.4);
-    mtRight1.configOpenloopRamp(0.4);
-    mtRight2.configOpenloopRamp(0.4);
+    mtLeft1.configOpenloopRamp(0.2);
+    mtLeft2.configOpenloopRamp(0.2);
+    mtRight1.configOpenloopRamp(0.2);
+    mtRight2.configOpenloopRamp(0.2);
 
     drRobotDrive.setDeadband(0.09); //By default, the Differential Drive class applies an input deadband of .02
 
