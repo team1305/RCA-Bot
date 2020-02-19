@@ -16,22 +16,24 @@ public class Command_Intake_Ground extends Command {
     // eg. requires(chassis);
     requires(Robot.intake);
     requires(Robot.hopper);
-    //requires(Robot.elevator);
+    requires(Robot.elevator);
     requires(Robot.shooter);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.intake.extendIntake();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.intake.extendIntake();
+    
     Robot.intake.enableIntake(0.5);
-    Robot.hopper.hopperIn(0.5);
-    //Robot.elevator.elevatorUp(0.5);
+    Robot.hopper.hopperIn(0.9);
+    Robot.elevator.elevatorUp(0.1);
+    Robot.shooter.setShooterSpeed(-0.05);
     
 
   }
@@ -48,7 +50,8 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.retractIntake();
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
-    //Robot.elevator.elevatorStop();
+    Robot.elevator.elevatorStop();
+    Robot.shooter.setShooterSpeed(0);
 
   }
 
@@ -59,7 +62,8 @@ public class Command_Intake_Ground extends Command {
     Robot.intake.retractIntake();
     Robot.intake.stopIntake();
     Robot.hopper.hopperStop();
-    //Robot.elevator.elevatorStop();
+    Robot.elevator.elevatorStop();
+    Robot.shooter.setShooterSpeed(0);
 
   }
 }
