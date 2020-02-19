@@ -10,7 +10,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,6 +21,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotMap {
@@ -45,29 +45,29 @@ public class RobotMap {
   public static WPI_TalonFX mtWinch2 = new WPI_TalonFX(10);
 
 
-  public static CANSparkMax mtLed = new CANSparkMax(9, MotorType.kBrushless);
+  public static Spark mtLed = new Spark(9);
 
 
    public final static StatorCurrentLimitConfiguration currentLimitConfig = new StatorCurrentLimitConfiguration(true, 40, 39.95, 1);
    public final static StatorCurrentLimitConfiguration currentLimitConfig30 = new StatorCurrentLimitConfiguration(true, 30, 29.95, 1);
     
   //Shooter PID values
-     public static final double kP_SHOOTER_INFRONT_OF_LINE = 0.09;  //0.085
+     public static final double kP_SHOOTER_INFRONT_OF_LINE = 0.095;  //0.085
      public static final double kI_SHOOTER_INFRONT_OF_LINE = 0;
      public static final double kD_SHOOTER_INFRONT_OF_LINE = 0;
      public static final double kF_SHOOTER_INFRONT_OF_LINE = 0.0512;
 
-     public static final double kP_SHOOTER_INITIATION_LINE = 0.095;
+     public static final double kP_SHOOTER_INITIATION_LINE = 0.09;
      public static final double kI_SHOOTER_INITIATION_LINE = 0;
      public static final double kD_SHOOTER_INITIATION_LINE = 0;
      public static final double kF_SHOOTER_INITIATION_LINE = 0.0512;
 
-     public static final double kP_SHOOTER_TRENCH = 0.09;
+     public static final double kP_SHOOTER_TRENCH = 0.1;
      public static final double kI_SHOOTER_TRENCH = 0;
      public static final double kD_SHOOTER_TRENCH = 0;
      public static final double kF_SHOOTER_TRENCH = 0.0512;
 
-     public static final double kP_SHOOTER_TRENCH_BACK = 0.09;
+     public static final double kP_SHOOTER_TRENCH_BACK = 0.1;
      public static final double kI_SHOOTER_TRENCH_BACK = 0;
      public static final double kD_SHOOTER_TRENCH_BACK = 0;
      public static final double kF_SHOOTER_TRENCH_BACK = 0.0512;
