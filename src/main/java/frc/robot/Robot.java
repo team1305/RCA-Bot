@@ -43,6 +43,26 @@ public class Robot extends TimedRobot {
   public static Subsystem_LED led = new Subsystem_LED();
 
 
+  private double Kp = -0.03f;
+  private double Ki = 0.012f; // 0.006
+  private double Kf = 0.05f;  //feedforward - minimum command signal
+  
+  private double left_command;
+  private double right_command;
+  
+  private double x, thor;
+  private int izone, irpm;
+  private boolean btarget;
+  private double zone1threshold = 50; //  pixel width
+  public double distance;
+  private int iloops = 0;
+  
+  private int isuccess = 0; 
+
+  private String cstate = "HUNT";
+
+  private int caseMove = 0;
+
 
 
   
@@ -111,6 +131,166 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
 
+    switch (cstate) {  
+      case "HUNT" : 
+        Robot.drive.LowGear();
+
+       distance = Robot.limelight.getDistance();
+       SmartDashboard.putNumber("thedistance", distance);
+
+
+       thor = Robot.limelight.get_Thor();
+       x = Robot.limelight.get_Tx();
+
+
+       if (Robot.limelight.is_Target()) {
+
+
+        left_command = Robot.drive.getLeftSide();
+        right_command = Robot.drive.getRightSide();
+  
+        double heading_error = -x;
+        double steering_adjust = 0.0f;
+             if (x > 1.5)
+             {
+                     steering_adjust = Kp*heading_error + Kf;
+             }
+             else if (x < -1.5)
+             {
+                     steering_adjust = Kp*heading_error - Kf;
+             }
+  
+  
+        left_command += steering_adjust;
+        right_command -= steering_adjust;
+  
+        SmartDashboard.putNumber("Left Command", left_command);
+        SmartDashboard.putNumber("Right Command", right_command);
+        SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+        SmartDashboard.putNumber("X", x);
+  
+  
+        if (left_command > 0.75){
+          left_command = 0.75;
+        }
+  
+        if (right_command > 0.75){
+          right_command = 0.75;
+        }
+  
+        Robot.drive.setLeftSide(-left_command);
+        Robot.drive.setRightSide(right_command); 
+           
+
+          if (Math.abs(x) <= 1.5){
+             // Calc Distance away so we know zone 1 or zone 2
+
+             isuccess = isuccess + 1;
+            
+            izone = 1; // default
+            /*
+            if (thor >= zone1threshold) { // bigger is closer
+              izone = 1;
+            } else if ( (thor < zone1threshold) && (thor > 0) ) {
+              izone = 2;
+            } else {
+              // should be no target
+            }
+            */
+
+            distance = Robot.limelight.getDistance();
+            SmartDashboard.putNumber("thedistance", distance );
+
+            if (distance > 0){
+              if (isuccess >= 5) {
+              cstate = "SHOOT";
+              
+              }
+              SmartDashboard.putNumber("isuccess", isuccess);
+            }
+          }
+            
+       } // if btarget
+
+       //Check hood angle, and shooter speed based on zone
+       break;
+      case "SHOOT" : 
+         
+
+         isuccess = 0;
+
+         if (distance <=200){ //1205
+           Robot.shooter.hoodDown();
+           irpm = 4000;
+           Robot.shooter.setShooterPIDInfrontOfLine();
+
+         }
+
+         else if ((distance > 200) && (distance <= 300)){ //120, 259
+           irpm = 4000;
+
+           Robot.shooter.hoodDown();
+           Robot.shooter.setShooterPIDInitiationLine();
+           
+         }
+
+         else if ((distance > 300) && (distance <= 400)){//259, 450
+           irpm = 5000;
+           Robot.shooter.hoodUp();
+           Robot.shooter.setShooterPIDTrench();
+         }
+
+         else if ((distance > 4000) && (distance <= 5000)){//259, 450
+          irpm = 4250;
+          Robot.shooter.hoodUp();
+          Robot.shooter.setShooterPIDTrench();
+        }
+
+
+         else{
+           irpm = 6000;
+           Robot.shooter.hoodUp();
+           Robot.shooter.setShooterPIDTrenchBack();
+         }
+
+         // Fire up the Shooter
+         Robot.shooter.setShooterRPM(irpm);
+         SmartDashboard.putNumber("irpm", irpm);
+         
+         SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
+         SmartDashboard.putNumber("thedistance", distance );
+         double droppedIrpm = irpm - 50;
+
+         if (Robot.shooter.getShooterRPM() >= droppedIrpm) {
+            // We are at speed, Turn on feeders 
+            Robot.elevator.elevatorUp(0.5);
+            Robot.hopper.hopperOut(0.4);
+            Robot.intake.enableIntake(0.4);
+
+            caseMove = caseMove + 1;
+
+            if (caseMove >= 100){
+              cstate = "MOVE";
+              caseMove = 0;
+            }
+         } 
+
+         break;
+      case "MOVE" : 
+      Robot.drive.curvaturedrive(-0.3, 0); // backwards at slow speed
+/*
+      if (Robot.drive.getEncLeftSide() > -10){
+        Robot.drive.setLeftSide(0.3);
+
+      }
+
+      if (Robot.drive.getEncRightSide() < 10){
+        Robot.drive.setRightSide(-0.3);
+
+      } */
+    }  
+
+
     //Autonomous Commands Using ShuffleBoard
 
     int autoMode = autoChooser.getSelected();
@@ -118,7 +298,6 @@ public class Robot extends TimedRobot {
 
     
     if (autoMode == 1){
-
 
     }
 
@@ -142,6 +321,12 @@ public class Robot extends TimedRobot {
   //Called when teleop is initialised
   @Override
   public void teleopInit() {
+    Robot.shooter.setShooterSpeed(0);
+    Robot.elevator.elevatorStop();
+    Robot.hopper.hopperStop();
+    Robot.intake.stopIntake();
+    Robot.drive.setRightSide(0);
+    Robot.drive.setLeftSide(0);
   }
 
   //This function is called periodically during operator control
