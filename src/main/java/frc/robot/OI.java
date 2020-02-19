@@ -72,9 +72,9 @@ public class OI {
   public OI() {
  
     // Primary Driver Stick
-    //btn1_A.whileHeld(new Command_Winch_Up());//xbox "A" Button 1
+    btn1_A.whileHeld(new Command_Winch_Up());//xbox "A" Button 1
 
-    //btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
+    btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
     //btn1_X.whileHeld(new Command_Spin_Shooter_RPM(5500, true));// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
 
