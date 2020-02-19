@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
@@ -25,7 +26,7 @@ public class Subsystem_LED extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private final CANSparkMax mtled = RobotMap.mtLed;
+  private final Spark mtled = RobotMap.mtLed;
   
 
   private final double C_blue = 0.87; //FMS
@@ -77,7 +78,16 @@ public class Subsystem_LED extends Subsystem {
     //theArray[4] = false;
     //SmartDashboard.putBooleanArray("FMS Values", theArray);
   }
-
+  public void setLavaWave(){
+    mtled.set(-0.39);
+    //theArray[1] = false;
+    //theArray[2] = true;
+    //theArray[3] = false;
+    //theArray[4] = false;
+    //SmartDashboard.putBooleanArray("FMS Values", theArray);
+  }
+  
+  
   public void setRed(){
     mtled.set(C_red);
     //theArray[1] = false;

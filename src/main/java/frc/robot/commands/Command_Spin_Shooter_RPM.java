@@ -51,9 +51,9 @@ public class Command_Spin_Shooter_RPM extends Command {
     SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
            if (Robot.shooter.getShooterRPM() >= RPM) {
               // We are at speed, Turn on feeders 
-              Robot.elevator.elevatorUp(0.3);
-              Robot.hopper.hopperOut(0.2);
-              Robot.intake.enableIntake(0.2);
+              Robot.elevator.elevatorUp(0.4);
+              Robot.hopper.hopperOut(0.3);
+              Robot.intake.enableIntake(0.3);
            }
 
   }
@@ -70,6 +70,9 @@ public class Command_Spin_Shooter_RPM extends Command {
   @Override
   protected void end() {
     Robot.shooter.setShooterSpeed(0);
+    Robot.elevator.elevatorUp(0);
+    Robot.hopper.hopperOut(0);
+    Robot.intake.enableIntake(0);
 
 
   }

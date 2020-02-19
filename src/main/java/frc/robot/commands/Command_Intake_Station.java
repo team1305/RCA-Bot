@@ -26,7 +26,7 @@ public class Command_Intake_Station extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.intake.reverseIntake(0.5);
+    Robot.intake.enableIntake(0.4);
     Robot.hopper.hopperIn(0.5);
     Robot.intake.extendIntake();
     Robot.elevator.elevatorUp(0.5);

@@ -28,7 +28,7 @@ public class Command_Puke extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.hopper.hopperOut(0.5);
+    Robot.hopper.hopperIn(0.5);
     Robot.intake.reverseIntake(0.5);
     Robot.intake.extendIntake();
   }

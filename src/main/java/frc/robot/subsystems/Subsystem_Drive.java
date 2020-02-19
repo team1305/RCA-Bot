@@ -126,6 +126,20 @@ public class Subsystem_Drive extends Subsystem {
     return currentSpeed;
   }
 
+  public double getEncRightSide(){
+    double currentRotations = mtRight1.getSelectedSensorPosition();
+    currentRotations = currentRotations*2048.0;
+    return currentRotations;
+  }
+
+  public double getEncLeftSide(){
+    double currentRotations = mtLeft1.getSelectedSensorPosition();
+    currentRotations = currentRotations*2048.0;
+    return currentRotations;
+  }
+
+  
+
   public double getLeftSide(){
     double currentSpeed = scgLeft.get();
     return currentSpeed;
@@ -150,6 +164,9 @@ public class Subsystem_Drive extends Subsystem {
 		return (JoystickDeadBand(input) * (1-(throttle*dThrottleFactor)));
 	}
 
+  public void curvaturedrive(double xspeed, double zrotation) {
+    drRobotDrive.curvatureDrive(xspeed, zrotation, true);
+  }
   //creates a driving function using specified joystick
   public void driveWithJoystick(Joystick stick) {
 
@@ -193,6 +210,10 @@ public class Subsystem_Drive extends Subsystem {
     this.slndShift.set(true);
     bIsLow = true;
     SmartDashboard.putBoolean("Gear", bIsLow);
+  }
+
+  public boolean IsLow() {
+     return bIsLow;
   }
 
   //toggles gear state

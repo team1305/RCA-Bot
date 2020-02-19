@@ -29,7 +29,7 @@ public class Command_ai_loop extends Command {
   private double left_command;
   private double right_command;
   
-  private double x, thor;
+  private double x;
   private int izone, irpm;
   private boolean btarget;
   private double zone1threshold = 50; //  pixel width
@@ -69,91 +69,48 @@ public class Command_ai_loop extends Command {
   protected void execute() {
      // AI Loop, States HUNT, SHOOT
 
-     //When game data isn't blank, and intake is on
-     if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  {
-
-      if (iloops <= 50){
-        Robot.led.setWhite();
-        iloops = iloops +1;
-        
-      }
-
-      else {
-        setColorWheel();
-        iloops = iloops +1;
-
-        if (iloops == 100){
-          iloops = 0;
-        }
-
-      }
-    }
-
-
-      //When game data is blank, and intake is on
-      else if (Robot.intake.isIntakeOn() && (getGamedata() == "")){
-
-      Robot.led.setWhite();
-
-      }
-
-
-     //When target is aquired and game data isn't blank 
-     else if (Robot.limelight.is_Target() && (getGamedata() != "")){
-      if (iloops <= 50){
-        Robot.led.setViolet();
-        iloops = iloops +1;
-        
-      }
-
-      else {
-        setColorWheel();
-        iloops = iloops +1;
-
-        if (iloops == 100){
-          iloops = 0;
-        }
-
-      }
-      
-     }
-
-     //When target is aquired and game data is blank 
-      else if (Robot.limelight.is_Target() && (getGamedata() == "")){
-      Robot.led.setViolet();
-     }
-
-     else {
-      Robot.led.setBlack();
-     }
-
-    
-
-     
-
+     // Colour Loop
+     set_colors();
 
 
      //Vision tracking code, activates when right bumper is pressed
      if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
-      
 
-      //Limelight turn to target
+       //Limelight turn to target
        switch (cstate) {  
        case "HUNT" : 
          // Use Limelight to move to target
          Robot.drive.LowGear();
+         Robot.shooter.setShooterRPM(4000); // ramp up to 4000 rpm as base so shoot will be faster
 
-         distance = Robot.limelight.getDistance();
-         SmartDashboard.putNumber("thedistance", distance);
+         // display target distance when in hunt state
+         //SmartDashboard.putNumber("thedistance", Robot.limelight.getDistance());
 
+         Robot.limelight.turnRobotToAnlge(Robot.limelight.get_Tx());
 
-         thor = Robot.limelight.get_Thor();
+         if (Math.abs(Robot.limelight.get_Tx()) <= 1.5){
+          // Calc Distance away so we know zone 1 or zone 2
+
+          isuccess = isuccess + 1;
+         
+          izone = 1; // default
+        
+          distance = Robot.limelight.getDistance();
+          SmartDashboard.putNumber("thedistance", distance );
+
+          if (distance > 0){
+            if (isuccess >= 5) {
+            cstate = "SHOOT";
+           
+            }
+           SmartDashboard.putNumber("isuccess", isuccess);
+          }
+        }
+
+         /*
          x = Robot.limelight.get_Tx();
-
-
+        
          if (Robot.limelight.is_Target()) {
-
-
           left_command = Robot.drive.getLeftSide();
           right_command = Robot.drive.getRightSide();
     
@@ -196,16 +153,7 @@ public class Command_ai_loop extends Command {
                isuccess = isuccess + 1;
               
               izone = 1; // default
-              /*
-              if (thor >= zone1threshold) { // bigger is closer
-                izone = 1;
-              } else if ( (thor < zone1threshold) && (thor > 0) ) {
-                izone = 2;
-              } else {
-                // should be no target
-              }
-              */
-
+             
               distance = Robot.limelight.getDistance();
               SmartDashboard.putNumber("thedistance", distance );
 
@@ -219,6 +167,7 @@ public class Command_ai_loop extends Command {
             }
               
          } // if btarget
+         */
 
          //Check hood angle, and shooter speed based on zone
          break;
@@ -227,14 +176,14 @@ public class Command_ai_loop extends Command {
 
            isuccess = 0;
 
-           if (distance <=120){
+           if (distance <=200){ //1205
              Robot.shooter.hoodDown();
              irpm = 4000;
              Robot.shooter.setShooterPIDInfrontOfLine();
 
            }
 
-           else if ((distance > 120) && (distance <= 259)){
+           else if ((distance > 200) && (distance <= 300)){ //120, 259
              irpm = 4000;
 
              Robot.shooter.hoodDown();
@@ -242,15 +191,28 @@ public class Command_ai_loop extends Command {
              
            }
 
-           else if ((distance > 259) && (distance <= 450)){
-             irpm = 5500;
+           else if ((distance > 300) && (distance <= 350)){//259, 450
+             irpm = 5000;
              Robot.shooter.hoodUp();
              Robot.shooter.setShooterPIDTrench();
            }
 
+           else if ((distance > 350) && (distance <= 400)){//259, 450
+            irpm = 5500;
+            Robot.shooter.hoodUp();
+            Robot.shooter.setShooterPIDTrench();
+          }
+
+           else if ((distance > 400) && (distance <= 500)){//259, 450
+            irpm = 5750;
+            Robot.shooter.hoodUp();
+            Robot.shooter.setShooterPIDTrench();
+          }
+
+
 
            else{
-             irpm = 5500;
+             irpm = 6000;
              Robot.shooter.hoodUp();
              Robot.shooter.setShooterPIDTrenchBack();
            }
@@ -261,18 +223,20 @@ public class Command_ai_loop extends Command {
            
            SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
            SmartDashboard.putNumber("thedistance", distance );
+           double droppedIrpm = irpm - 50;
 
-           if (Robot.shooter.getShooterRPM() >= irpm) {
+           if (Robot.shooter.getShooterRPM() >= droppedIrpm) {
               // We are at speed, Turn on feeders 
-              Robot.elevator.elevatorUp(0.3);
-              Robot.hopper.hopperOut(0.2);
-              Robot.intake.enableIntake(0.2);
+              Robot.elevator.elevatorUp(0.5);
+              Robot.hopper.hopperOut(0.4);
+              Robot.intake.enableIntake(0.4);
           }
         break;
       }
       
-     } else { // button not pressed
-        if (cstate == "SHOOT") {
+     } 
+     else { // button not pressed
+        if (cstate == "SHOOT") { // RECOVERY STATE
            // Button no longer pressed but last state was shoot
            // Turn off Shooter and Feeders
            Robot.shooter.setShooterRPM(0);
@@ -282,6 +246,7 @@ public class Command_ai_loop extends Command {
            
            Robot.shooter.hoodDown();
 
+           Robot.drive.HighGear();
 
            Robot.led.setBlack();
 
@@ -289,7 +254,7 @@ public class Command_ai_loop extends Command {
            izone = 1;
            irpm = 0;
 
-        } else {
+        } else { // Reset back to HUNT State
            cstate = "HUNT";
            izone = 1;
            irpm = 0;
@@ -299,11 +264,45 @@ public class Command_ai_loop extends Command {
 
   }
 
-
-
-
-  
-
+  protected void set_colors() {
+    
+    if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  { // Intake On, Have Game Data
+      if (iloops <= 50){
+        Robot.led.setWhite();
+        iloops = iloops +1;    
+      } else {
+        setColorWheel();
+        iloops = iloops +1;
+    
+        if (iloops == 100){
+          iloops = 0;
+        }
+      }
+    } else if (Robot.intake.isIntakeOn() && (getGamedata() == "")) { // Intake On, no Game Data  
+          Robot.led.setWhite(); 
+    } else if (Robot.limelight.is_Target() && (getGamedata() != "")){ // Have Target, Have Game Data
+      if (iloops <= 50){
+        Robot.led.setViolet();
+        iloops = iloops +1;    
+      } else {
+        setColorWheel();
+        iloops = iloops +1;
+        if (iloops == 100){
+          iloops = 0;
+        }
+      }
+          
+    } else if (Robot.limelight.is_Target() && (getGamedata() == "")){ // Have Target, No Game Data
+      Robot.led.setViolet();
+    } else { // Lights Off
+      if (Robot.drive.IsLow()) {
+        Robot.led.setLavaWave();
+      } else {   
+         Robot.led.setBlack();
+      }
+    }
+    
+  }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
