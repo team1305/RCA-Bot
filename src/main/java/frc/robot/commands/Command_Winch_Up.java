@@ -25,7 +25,7 @@ public class Command_Winch_Up extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.winch.WinchSpeed(0.3);
+    Robot.winch.WinchSpeed(0.5);
   }
 
   // Make this return true when this Command no longer needs to run execute()
