@@ -76,7 +76,9 @@ public class Subsystem_Limelight extends Subsystem {
     return distance;
   }
 
-  public void turnRobotToAnlge(){
+  public void turnRobotToAnlge(double x){
+
+    if (Robot.limelight.is_Target()) {
 
       left_command = Robot.drive.getLeftSide();
       right_command = Robot.drive.getRightSide();
@@ -113,14 +115,15 @@ public class Subsystem_Limelight extends Subsystem {
       Robot.drive.setLeftSide(-left_command);
       Robot.drive.setRightSide(right_command);
     }
+  }
 
-    public void trackToDistance(){
+    public void trackToDistance(double expectedValue){
         double KpAim = -0.1f;
         double KpDistance = -0.1f;
         double min_aim_command = 0.05f;
 
         double heading_error = -get_Tx();
-        double distance_error = -get_Ty(); //Plus the inverse of expected value for distance to position
+        double distance_error = -get_Ty() + -(expectedValue); //Plus the inverse of expected value for distance to position
         double tx = get_Tx();
         double steering_adjust = 0.0f;
 
@@ -174,7 +177,6 @@ public class Subsystem_Limelight extends Subsystem {
     //SmartDashboard.putNumber("LimelightY", ty);
 
     return table;
-
   }
 
 
