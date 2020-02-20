@@ -80,9 +80,9 @@ public class OI {
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
-    //btn1_LB.whileHeld(new Command_Supply_Balls());//xbox "LB" Button 5, this is the tracking
+    //THIS IS BEING USED FOR COMMAND AI LOOP TRACK WHILE MOVING //btn1_LB.whileHeld(new Command_Supply_Balls());//xbox "LB" Button 5, this is the tracking
     
-    //btn1_RB.whileHeld(new Command_Supply_Balls());//xbox "RB" Button 6
+    //THIS IS FOR COMMAND AI LOOP TRACK TO ANGLE //btn1_RB.whileHeld(new Command_Supply_Balls());//xbox "RB" Button 6
 
     btn1_Back.whenPressed(new Command_Compressor_OFF());//xbox "Back" Button 7
 
