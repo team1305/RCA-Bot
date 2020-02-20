@@ -72,6 +72,82 @@ public class Command_ai_loop extends Command {
      // Colour Loop
      set_colors();
 
+     //Vision tracking code for distance
+     if (Robot.oi.getJoystickDriver().getRawButton(5)){ //Driver LB
+      switch (cstate){
+        case "HUNT":
+          Robot.drive.LowGear();
+          Robot.shooter.setShooterRPM(4000);
+          Robot.limelight.trackToDistance(0);//Offset from target
+          if (Math.abs(Robot.limelight.get_Tx()) <= 1 ){
+            if (Math.abs(Robot.limelight.get_Ty()) <=1){
+              cstate = "SHOOT";
+            }
+          }
+          break;
+
+
+        case "SHOOT":
+         distance = Robot.limelight.getDistance();
+
+         if (distance <=200){ //1205
+          Robot.shooter.hoodDown();
+          irpm = 4000;
+          Robot.shooter.setShooterPIDInfrontOfLine();
+
+          }
+        else{
+
+        }
+
+        Robot.shooter.setShooterRPM(irpm);
+        SmartDashboard.putNumber("irpm", irpm);
+           
+        SmartDashboard.putNumber("shooterRPM", Robot.shooter.getShooterRPM() );
+        SmartDashboard.putNumber("thedistance", distance );
+        double droppedIrpm = irpm - 50;
+
+        if (Robot.shooter.getShooterRPM() >= droppedIrpm) {
+              // We are at speed, Turn on feeders 
+              Robot.elevator.elevatorUp(0.5);
+              Robot.hopper.hopperOut(0.4);
+              Robot.intake.enableIntake(0.4);
+        }
+
+
+      }
+     }
+
+      else { // button not pressed
+        if (cstate == "SHOOT") { // RECOVERY STATE
+           // Button no longer pressed but last state was shoot
+           // Turn off Shooter and Feeders
+           Robot.shooter.setShooterRPM(0);
+           Robot.elevator.elevatorUp(0);
+           Robot.hopper.hopperOut(0);
+           Robot.intake.enableIntake(0);
+           Robot.shooter.hoodDown();
+           Robot.drive.HighGear();
+
+           Robot.led.setBlack();
+
+           cstate = "HUNT";
+           izone = 1;
+           irpm = 0;
+
+        } 
+        else { // Reset back to HUNT State
+           cstate = "HUNT";
+           izone = 1;
+           irpm = 0;
+        }
+
+     }
+
+
+
+     
+
 
      //Vision tracking code, activates when right bumper is pressed
      if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
@@ -85,10 +161,11 @@ public class Command_ai_loop extends Command {
 
          // display target distance when in hunt state
          //SmartDashboard.putNumber("thedistance", Robot.limelight.getDistance());
+         x = Robot.limelight.get_Tx();
 
-         Robot.limelight.turnRobotToAnlge(Robot.limelight.get_Tx());
+         Robot.limelight.turnRobotToAnlge(x);
 
-         if (Math.abs(Robot.limelight.get_Tx()) <= 1.5){
+         if (Math.abs(x) <= 1.5){
           // Calc Distance away so we know zone 1 or zone 2
 
           isuccess = isuccess + 1;
