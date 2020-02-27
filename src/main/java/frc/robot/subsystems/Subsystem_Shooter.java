@@ -113,7 +113,7 @@ public class Subsystem_Shooter extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //unless interupted the default command will allow driver to drive with joystick
-   setDefaultCommand(new Command_ai_loop());
+   //setDefaultCommand(new Command_ai_loop());
   }
 
   public boolean getPidFromDashboard(){
