@@ -11,6 +11,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.I2C;
+
+import edu.wpi.first.wpilibj.Encoder;
 
 //import com.revrobotics.CANEncoder;
 //import com.revrobotics.CANSparkMax;
@@ -18,7 +22,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+//import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -35,7 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import com.kauailabs.navx.frc.AHRS;
+
 
 
 
@@ -57,6 +63,27 @@ public class Subsystem_Drive extends Subsystem {
   private final WPI_TalonFX mtLeft2 = RobotMap.mtDriveLeft2;
   private final WPI_TalonFX mtRight1 = RobotMap.mtDriveRight1;
   private final WPI_TalonFX mtRight2 = RobotMap.mtDriveRight2;
+
+  private AHRS navx;
+  private Encoder Left_wheel_encoder;
+	private Encoder Right_wheel_encoder;
+
+  double circumferenceOfWheel = 6 * Math.PI;
+  double GearRatio = 0.16666; /// 11/66
+  double pulsesPerRevolution = 20;
+  double driveCorrectionMultiplier = 1.43; // set this equal actual distance / desired distance
+
+
+  private double Kp = Constants.LIMELIGHT_KP;
+  private double Ki = Constants.LIMELIGHT_KI; // 0.006
+  private double Kd = 0; // 0.006
+  private double Kf = Constants.LIMELIGHT_KF;  //feedforward - minimum command signal
+
+  public PIDController limelightpid = new PIDController(Kp,Ki,Kd,Kf);
+
+
+
+
 
   //private AHRS navx = new AHRS(SerialPort.Port.kMXP);
 
@@ -86,6 +113,9 @@ public class Subsystem_Drive extends Subsystem {
   
   //sets ramprate of drive motors -- now does things!
   public Subsystem_Drive() {
+
+    //navx = new AHRS(I2C.Port.kMXP);
+
     //Trying to get brake mode working
     mtLeft1.setNeutralMode(NeutralMode.Brake);
     mtLeft2.setNeutralMode(NeutralMode.Brake);
@@ -103,6 +133,8 @@ public class Subsystem_Drive extends Subsystem {
 
     drRobotDrive.setDeadband(0.09); //By default, the Differential Drive class applies an input deadband of .02
 
+    drRobotDrive.setSafetyEnabled(false);
+
 
     mtLeft1.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40); // TAKE A LOOK AT CURRENT LIMITING IMPORTANT
     mtLeft2.configStatorCurrentLimit(RobotMap.currentLimitConfig, 40);
@@ -112,6 +144,61 @@ public class Subsystem_Drive extends Subsystem {
     // SmartDashboard.putNumber("dThrottleFactor", dThrottleFactor);
   }
 
+  public double getratio_low() {
+    // Convert encoder ticks to 1 inch
+    double encoder_ticks = 2048;
+    double gearratio_low = 26.67;
+   double gearratio_high = 11.73;
+   double wheel_circumfrance = 6 * Math.PI;
+   return Math.round( (encoder_ticks * gearratio_low) / wheel_circumfrance);  
+  }
+
+
+  public double getratio_high() {
+    // Convert encoder ticks to 1 inch
+    double encoder_ticks = 2048;
+    double gearratio_low = 26.67;
+   double gearratio_high = 11.73;
+   double wheel_circumfrance = 6 * Math.PI;
+   return Math.round( (encoder_ticks * gearratio_high) / wheel_circumfrance);  
+  }
+
+  public void gyroReset() {
+		navx.reset();
+  }
+  public void driveStop() {
+      //drRobotDrive.curvatureDrive(0, 0, true);
+		// robotdrive.stopMotor();
+	}
+
+  public void driveTank(double leftValue, double rightValue) { // For AutoDriveStraight and Rotate and Curve
+		// Used in Auto - AutoNewDriveStraight
+		// Robot.intake.intakeOff();
+	//	drRobotDrive.tankDrive(leftValue, rightValue);
+    
+	}
+
+
+	//
+	public double gyroGetAngle() {
+		// return ahrs.getAngle();
+		return navx.getAngle();
+	}
+
+  public void resetEncoder() {
+		Left_wheel_encoder.reset();
+		Right_wheel_encoder.reset();
+		// driveLeft1.getSensorCollection().setQuadraturePosition(0,10); //cimcoder
+		// driveRight4.getSensorCollection().setQuadraturePosition(0,10); //cimcoder
+
+	}
+
+  public double getDistance() {
+    double left_wheel_rot =  getEncLeftSide();
+		double right_wheel_rot = getEncRightSide();
+		double average_wheel_rot = (left_wheel_rot + right_wheel_rot) / 2;
+		return average_wheel_rot;
+	}
   public void setRightSide(double speed){
     scgRight.set(speed);
 
@@ -128,13 +215,13 @@ public class Subsystem_Drive extends Subsystem {
 
   public double getEncRightSide(){
     double currentRotations = mtRight1.getSelectedSensorPosition();
-    currentRotations = currentRotations*2048.0;
+    currentRotations = currentRotations; //*2048.0;
     return currentRotations;
   }
 
   public double getEncLeftSide(){
     double currentRotations = mtLeft1.getSelectedSensorPosition();
-    currentRotations = currentRotations*2048.0;
+    currentRotations = currentRotations; //*2048.0;
     return currentRotations;
   }
 
@@ -148,6 +235,7 @@ public class Subsystem_Drive extends Subsystem {
   @Override
   public void initDefaultCommand() {
     //unless interupted the default command will allow driver to drive with joystick
+    System.out.println("i ran 1");
     setDefaultCommand(new Command_Drive_With_Joystick());
   }
 
@@ -167,6 +255,8 @@ public class Subsystem_Drive extends Subsystem {
   public void curvaturedrive(double xspeed, double zrotation) {
     drRobotDrive.curvatureDrive(xspeed, zrotation, true);
   }
+
+
   //creates a driving function using specified joystick
   public void driveWithJoystick(Joystick stick) {
 
@@ -176,12 +266,6 @@ public class Subsystem_Drive extends Subsystem {
 
     //uses joystick to do driving thing
     drRobotDrive.curvatureDrive(xSpeed, zRotation, true);
-
-    // double dSquareFactor2 = SmartDashboard.getNumber("dSquareFactor", dSquareFactor);
-    // double dThrottleFactor2 = SmartDashboard.getNumber("dThrottleFactor", dThrottleFactor);
-
-    // if((dSquareFactor2 != dSquareFactor)) {dSquareFactor = dSquareFactor2;}
-    // if((dThrottleFactor2 != dThrottleFactor)) {dThrottleFactor = dThrottleFactor2;}
   }
 
   //stops the drive train
@@ -225,6 +309,101 @@ public class Subsystem_Drive extends Subsystem {
     }
     SmartDashboard.putBoolean("Gear", bIsLow);
   }
+
+
+
+  public void turnRobotToAngle(double x){
+
+    if (Robot.limelight.is_Target()) {
+      double left_command;
+      double right_command;
+
+      left_command = Robot.drive.getLeftSide();
+      right_command = Robot.drive.getRightSide();
+
+      double heading_error = -x;
+      double steering_adjust = 0.0f;
+           if (x > 1)
+           {
+                   steering_adjust = Kp*heading_error + Kf;
+           }
+           else if (x < -1)
+           {
+                   steering_adjust = Kp*heading_error - Kf;
+           }
+           else{
+             steering_adjust = 0;
+           }
+
+
+      left_command += steering_adjust;
+      right_command -= steering_adjust;
+
+      SmartDashboard.putNumber("Left Command", left_command);
+      SmartDashboard.putNumber("Right Command", right_command);
+      SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+      SmartDashboard.putNumber("X", x);
+
+
+      if (left_command > 0.75){
+        left_command = 0.75;
+      }
+
+      if (right_command > 0.75){
+        right_command = 0.75;
+      }
+
+      Robot.drive.setLeftSide(-left_command);
+      Robot.drive.setRightSide(right_command);
+    }
+  }
+
+
+  public void turnRobotToAnglePID(double x){
+
+    if (Robot.limelight.is_Target()) {
+      double left_command;
+      double right_command;
+
+      left_command = Robot.drive.getLeftSide();
+      right_command = Robot.drive.getRightSide();
+
+      double heading_error = -x;
+      double steering_adjust = 0.0f;
+           if (Math.abs(x) > (x+1))
+           {
+                   steering_adjust = limelightpid.calculate(heading_error);
+           }
+
+           else{
+             steering_adjust = 0;
+           }
+
+
+      left_command = steering_adjust;
+      right_command = steering_adjust;
+
+      SmartDashboard.putNumber("Left Command", left_command);
+      SmartDashboard.putNumber("Right Command", right_command);
+      SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+      SmartDashboard.putNumber("X", x);
+
+
+      if (left_command > 0.75){
+        left_command = 0.75;
+      }
+
+      if (right_command > 0.75){
+        right_command = 0.75;
+      }
+
+      Robot.drive.setLeftSide(-left_command);
+      Robot.drive.setRightSide(right_command);
+    }
+  }
+
+
+  
 
 }
 
