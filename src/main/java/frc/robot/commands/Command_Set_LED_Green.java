@@ -25,7 +25,8 @@ public class Command_Set_LED_Green extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.led.setGreen();
+    //Robot.led.setGreen();
+    Robot.led.setWhite();
   }
 
   // Make this return true when this Command no longer needs to run execute()
