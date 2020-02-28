@@ -41,9 +41,10 @@ public class Command_ai_loop extends Command {
     
   public Command_ai_loop() {
     requires(Robot.shooter);
-    addrequirements(Robot.drive);
+    requires(Robot.drive);
     requires(Robot.limelight);
-    
+    requires(Robot.intake);
+    requires(Robot.led);
     
   } 
 
@@ -72,6 +73,7 @@ public class Command_ai_loop extends Command {
      // Colour Loop
      set_colors();
 
+     /*
      //Vision tracking code for distance
      if (Robot.oi.getJoystickDriver().getRawButton(5)){ //Driver LB
       switch (cstate){
@@ -143,6 +145,7 @@ public class Command_ai_loop extends Command {
         }
 
      }
+     */
 
 
 
@@ -161,11 +164,13 @@ public class Command_ai_loop extends Command {
 
          // display target distance when in hunt state
          //SmartDashboard.putNumber("thedistance", Robot.limelight.getDistance());
+         
          x = Robot.limelight.get_Tx();
+         x = x + Robot.limelight.getOffsetRatio();
+         
+         Robot.drive.turnRobotToAngle(x);
 
-         Robot.limelight.turnRobotToAnlge(x);
-
-         if (Math.abs(x) <= 1.5){
+         if (Math.abs(x) <= 1){
           // Calc Distance away so we know zone 1 or zone 2
 
           isuccess = isuccess + 1;
@@ -224,7 +229,8 @@ public class Command_ai_loop extends Command {
           Robot.drive.setRightSide(right_command); 
              
 
-            if (Math.abs(x) <= 1.5){
+
+            if (Math.abs(x) <= 1){
                // Calc Distance away so we know zone 1 or zone 2
 
                isuccess = isuccess + 1;
@@ -242,6 +248,7 @@ public class Command_ai_loop extends Command {
                 SmartDashboard.putNumber("isuccess", isuccess);
               }
             }
+            
               
          } // if btarget
          */
@@ -342,6 +349,9 @@ public class Command_ai_loop extends Command {
   }
 
   protected void set_colors() {
+
+    SmartDashboard.putString("Game Data", getGamedata());
+    SmartDashboard.putBoolean("Intake On", Robot.intake.isIntakeOn());
     
     if (Robot.intake.isIntakeOn() && (getGamedata() != ""))  { // Intake On, Have Game Data
       if (iloops <= 50){

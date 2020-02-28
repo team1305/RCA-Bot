@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -30,7 +31,10 @@ public class Subsystem_Limelight extends Subsystem {
   private double x, thor; //Limelight Values
   private double Kp = Constants.LIMELIGHT_KP;
   private double Ki = Constants.LIMELIGHT_KI; // 0.006
+  private double Kd = 0; // 0.006
   private double Kf = Constants.LIMELIGHT_KF;  //feedforward - minimum command signal
+
+  //public PIDController limelightpid = new PIDController(Kp,Ki,Kd,Kf);
 
 
 
@@ -59,6 +63,32 @@ public class Subsystem_Limelight extends Subsystem {
     return table.getEntry("ty").getDouble(0.0);
   }
 
+  public double getOffsetRatio(){
+    double tshort = table.getEntry("tshort").getDouble(0.0);
+    double tlong = table.getEntry("tlong").getDouble(0.0);
+    double tresult = tlong-tshort;
+    double tdistance = Robot.limelight.getDistance();
+    double result = 0;
+    if ((tdistance >= 192) && (tdistance <= 242)){
+      if(Math.abs(tresult) >= 2){
+        if (Robot.drive.gyroGetAngle() >= 2){
+          result = 0 - tresult;
+        }
+
+        else if (Robot.drive.gyroGetAngle() <= -2){
+          result = tresult;
+        }
+
+        else{
+          result = tresult;
+        }
+      }
+    }
+    return result;   
+  }
+
+
+
 
   public double getDistance(){
     double distance = 0;
@@ -76,83 +106,9 @@ public class Subsystem_Limelight extends Subsystem {
     return distance;
   }
 
-  public void turnRobotToAnlge(double x){
-
-    if (Robot.limelight.is_Target()) {
-
-      left_command = Robot.drive.getLeftSide();
-      right_command = Robot.drive.getRightSide();
-
-      double heading_error = -x;
-      double steering_adjust = 0.0f;
-           if (x > 1.5)
-           {
-                   steering_adjust = Kp*heading_error + Kf;
-           }
-           else if (x < -1.5)
-           {
-                   steering_adjust = Kp*heading_error - Kf;
-           }
-
-
-      left_command += steering_adjust;
-      right_command -= steering_adjust;
-
-      SmartDashboard.putNumber("Left Command", left_command);
-      SmartDashboard.putNumber("Right Command", right_command);
-      SmartDashboard.putNumber("Steering Adjust", steering_adjust);
-      SmartDashboard.putNumber("X", x);
-
-
-      if (left_command > 0.75){
-        left_command = 0.75;
-      }
-
-      if (right_command > 0.75){
-        right_command = 0.75;
-      }
-
-      Robot.drive.setLeftSide(-left_command);
-      Robot.drive.setRightSide(right_command);
-    }
-  }
-
-    public void trackToDistance(double expectedValue){
-        double KpAim = -0.1f;
-        double KpDistance = -0.1f;
-        double min_aim_command = 0.05f;
-
-        double heading_error = -get_Tx();
-        double distance_error = -get_Ty() + -(expectedValue); //Plus the inverse of expected value for distance to position
-        double tx = get_Tx();
-        double steering_adjust = 0.0f;
-
-        if (tx > 1)
-        {
-                steering_adjust = KpAim*heading_error - min_aim_command;
-        }
-        else if (tx < -1)
-        {
-                steering_adjust = KpAim*heading_error + min_aim_command;
-        }
-
-        double distance_adjust = KpDistance * distance_error;
-
-        left_command += steering_adjust + distance_adjust;
-        right_command -= steering_adjust + distance_adjust;
-
-        if (left_command > 0.75){
-          left_command = 0.75;
-        }
   
-        if (right_command > 0.75){
-          right_command = 0.75;
-        }
-  
-        Robot.drive.setLeftSide(-left_command);
-        Robot.drive.setRightSide(right_command);
-    }
 
+    
   
 
   @Override
