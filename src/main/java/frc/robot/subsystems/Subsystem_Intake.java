@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -27,7 +28,7 @@ public class Subsystem_Intake extends Subsystem {
   public static Solenoid slndIntake = RobotMap.slndIntake;
 
 
-  private boolean intakeOn = false;
+  public boolean bintakeOn;
 
   public Subsystem_Intake() {
     
@@ -35,6 +36,7 @@ public class Subsystem_Intake extends Subsystem {
     mtIntake.setNeutralMode(NeutralMode.Coast);
     mtIntake.configOpenloopRamp(0.4);
     mtIntake.configStatorCurrentLimit(RobotMap.currentLimitConfig30, 30);
+    bintakeOn = false;
 
   }
 
@@ -55,25 +57,32 @@ public class Subsystem_Intake extends Subsystem {
 
   public void stopIntake() {
     mtIntake.set(ControlMode.PercentOutput, 0);
+
   }
 
 
   public void extendIntake() {
     slndIntake.set(true);
-    intakeOn = true;
+    bintakeOn = true;
   }
+
 
   public void retractIntake() {
     slndIntake.set(false);
-    intakeOn = false;
+    //bintakeOn = false;
 
   }
 
 
   public boolean isIntakeOn(){
-    return intakeOn;
+    if (bintakeOn) {
+      return true;
+    }else {
+      return false;
+    }
+    //return bintakeOn;
+    //return slndIntake.get();
   }
-  
 }
 
 
