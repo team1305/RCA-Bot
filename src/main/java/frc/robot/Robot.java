@@ -7,20 +7,15 @@
 
 package frc.robot;
 
-import java.util.HashMap;
-
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import frc.robot.auto_commands.AutoDrivePID;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.Command_Drive_With_Joystick;
 import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_Drive;
 import frc.robot.subsystems.Subsystem_Elevator;
@@ -70,7 +65,7 @@ public class Robot extends TimedRobot {
 
   private int caseMove = 0;
 
-
+  private AutoDrivePID autodrive = new AutoDrivePID(100000, Robot.drive);
 
   
 
@@ -100,15 +95,17 @@ public class Robot extends TimedRobot {
       System.out.println("ERROR: setting camera: " + ex.getMessage()) ;
     } */
 
-  
-    /*
+
+    
     autonomousModes = new SendableChooser<CommandGroup>();
     autonomousModes.setDefaultOption("6 ball auto, straight lined up, our trench", new AutoCommands(1));
     autonomousModes.addOption("8 ball auto, straight lined up, our trench", new AutoCommands(2));
     autonomousModes.addOption("8 ball auto, opposite side steal, then generator", new AutoCommands(3));
 
     SmartDashboard.putData("AUTO Modes", autonomousModes);
-    */
+    Robot.drive.HighGear();
+    Robot.drive.resetEncoder();
+    Robot.drive.gyroReset();
 
 
 
@@ -133,6 +130,8 @@ public class Robot extends TimedRobot {
   //Called when autonomous is initalised
   @Override
   public void autonomousInit() {
+    Robot.drive.gyroReset();
+    Robot.drive.resetEncoder();
 
 
     	autonomousCommand = (Command) autonomousModes.getSelected();
@@ -172,6 +171,7 @@ public class Robot extends TimedRobot {
 
     Scheduler.getInstance().run();
     //winch.UpdateLimitSwitch();
+    //Robot.led.setOcean();
   }
 
   //This function is called periodically during test mode

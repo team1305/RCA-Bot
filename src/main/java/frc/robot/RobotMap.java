@@ -10,9 +10,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 //import com.ctre.phoenix.CANifier;
 //import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 //import com.revrobotics.CANEncoder;
@@ -22,7 +19,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotMap {
 
