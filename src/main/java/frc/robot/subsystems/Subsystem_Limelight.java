@@ -7,14 +7,13 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
-import frc.robot.Robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
 
 /**
@@ -134,6 +133,57 @@ public class Subsystem_Limelight extends Subsystem {
 
     return table;
   }
+
+  public void limelightOff(){
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+  }
+
+  public void turnRobotToAngle(double x){
+
+    if (Robot.limelight.is_Target()) {
+      double left_command;
+      double right_command;
+
+      left_command = Robot.drive.getLeftSide();
+      right_command = Robot.drive.getRightSide();
+
+      double heading_error = -x;
+      double steering_adjust = 0.0f;
+           if (x > 1)
+           {
+                   steering_adjust = Kp*heading_error + Kf;
+           }
+           else if (x < -1)
+           {
+                   steering_adjust = Kp*heading_error - Kf;
+           }
+           else{
+             steering_adjust = 0;
+           }
+
+
+      left_command += steering_adjust;
+      right_command -= steering_adjust;
+
+      SmartDashboard.putNumber("Left Command", left_command);
+      SmartDashboard.putNumber("Right Command", right_command);
+      SmartDashboard.putNumber("Steering Adjust", steering_adjust);
+      SmartDashboard.putNumber("X", x);
+
+
+      if (left_command > 0.75){
+        left_command = 0.75;
+      }
+
+      if (right_command > 0.75){
+        right_command = 0.75;
+      }
+
+      Robot.drive.setLeftSide(-left_command);
+      Robot.drive.setRightSide(right_command);
+    }
+  }
+
 
 
   
