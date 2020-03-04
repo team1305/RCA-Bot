@@ -7,15 +7,14 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.Subsystem_Drive;
+
 
 
 public class Command_ai_loop extends Command {
@@ -41,7 +40,7 @@ public class Command_ai_loop extends Command {
     
   public Command_ai_loop() {
     requires(Robot.shooter);
-    requires(Robot.drive);
+    //requires(Robot.drive);
     requires(Robot.limelight);
     requires(Robot.intake);
     requires(Robot.led);
@@ -50,8 +49,6 @@ public class Command_ai_loop extends Command {
 
   
  
-  private void addrequirements(Subsystem_Drive drive) {
-}
 
 
 
@@ -166,9 +163,10 @@ public class Command_ai_loop extends Command {
          //SmartDashboard.putNumber("thedistance", Robot.limelight.getDistance());
          
          x = Robot.limelight.get_Tx();
-         x = x + Robot.limelight.getOffsetRatio();
+         //x = x + Robot.limelight.getOffsetRatio();
+         SmartDashboard.putNumber("x ai loop", x);
          
-         Robot.drive.turnRobotToAngle(x);
+         Robot.limelight.turnRobotToAngle(x);
 
          if (Math.abs(x) <= 1){
           // Calc Distance away so we know zone 1 or zone 2
