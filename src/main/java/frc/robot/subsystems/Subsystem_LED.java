@@ -7,16 +7,8 @@
 
 package frc.robot.subsystems;
 
-import java.awt.Color;
-import java.util.Map;
-
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 /**
@@ -37,6 +29,7 @@ public class Subsystem_LED extends Subsystem {
   private final double C_white = 0.93; //Intake
   private final double C_violet = 0.91; //Violet
   private final double C_black = 0.99; //Off
+  private final double C_Ocean_Palette = -0.41; //Off
 
   //boolean theArray[];
 
@@ -55,11 +48,24 @@ public class Subsystem_LED extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+     //setDefaultCommand(new Command_color_loop());
+
   }
 
   public void setBlue(){
     mtled.set(C_blue);
+    //SuppliedValueWidget colorWidget = Shuffleboard.getTab("SmartDashboard").addBoolean("FMSColor", () -> true);
+    //colorWidget.withProperties(Map.of("colorWhenTrue", Color.blue));
+
+    //theArray[1] = true;
+    //theArray[2] = false;
+    //theArray[3] = false;
+    //theArray[4] = false;
+    //SmartDashboard.putBooleanArray("FMS Values", theArray);
+  }
+
+  public void setOcean(){
+    mtled.set(C_Ocean_Palette);
     //SuppliedValueWidget colorWidget = Shuffleboard.getTab("SmartDashboard").addBoolean("FMSColor", () -> true);
     //colorWidget.withProperties(Map.of("colorWhenTrue", Color.blue));
 
