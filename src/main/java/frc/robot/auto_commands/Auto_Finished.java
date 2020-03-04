@@ -25,7 +25,7 @@ public class Auto_Finished extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drive.driveStop();
+    	Robot.drive.DriveStop();
     //	Robot.elevator.Stage1Stop();
     //	Robot.intake.intakeOff();
     //	Robot.arm.ArmUp();
