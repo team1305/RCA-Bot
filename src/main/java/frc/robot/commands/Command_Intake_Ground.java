@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class Command_Intake_Ground extends Command {
@@ -25,16 +24,17 @@ public class Command_Intake_Ground extends Command {
   @Override
   protected void initialize() {
     Robot.intake.extendIntake();
-    Robot.intake.enableIntake(0.5);
-    Robot.hopper.hopperIn(0.9);
-    //Robot.elevator.elevatorUp(0.1);
-    Robot.shooter.setShooterSpeed(-0.05);
+
     
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.intake.enableIntake(0.9);
+    Robot.hopper.hopperIn(0.9);
+    //Robot.elevator.elevatorUp(0.1);
+    Robot.shooter.setShooterSpeed(-0.05);
   
   }
 
