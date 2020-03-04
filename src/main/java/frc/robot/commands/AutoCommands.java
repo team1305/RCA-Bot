@@ -1,26 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.Robot;
-import frc.robot.auto_commands.AutoDrivePID;
-import frc.robot.auto_commands.Auto_Drive;
-import frc.robot.auto_commands.Auto_Drive_Curve;
-import frc.robot.auto_commands.Auto_Drive_Curve_Reverse;
-import frc.robot.auto_commands.Auto_Drive_Gyro;
 import frc.robot.auto_commands.Auto_Drive_Master;
-import frc.robot.auto_commands.Auto_Drive_Reverse;
 import frc.robot.auto_commands.Auto_Finished;
-import frc.robot.auto_commands.Auto_Intake_Off;
-import frc.robot.auto_commands.Auto_Intake_On;
 import frc.robot.auto_commands.Auto_Reset_Encoders;
-import frc.robot.auto_commands.Auto_Shoot;
-import frc.robot.auto_commands.Auto_Shooter_Warm_Up;
-import frc.robot.auto_commands.Auto_Tank_Rotate;
 import frc.robot.auto_commands.Auto_Tank_Rotate_Master;
-import frc.robot.auto_commands.Auto_Turn_To_Target;
-import frc.robot.auto_commands.Auto_Wait_Seconds;
-import frc.robot.subsystems.Subsystem_Drive;
 
 /**
  *
