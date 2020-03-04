@@ -15,18 +15,21 @@ public class Auto_Intake_On extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	
-    	 requires(Robot.intake);
+         //requires(Robot.intake);
+         //requires(Robot.hopper);
              	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
 		Robot.intake.extendIntake();
-    	Robot.intake.enableIntake(0.5);
+    	//Robot.intake.enableIntake(0.5);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        Robot.intake.enableIntake(0.5);
+        Robot.hopper.hopperIn(0.9);
 	
     }
 
