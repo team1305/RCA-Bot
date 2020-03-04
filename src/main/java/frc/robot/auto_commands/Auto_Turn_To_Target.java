@@ -9,6 +9,8 @@ import frc.robot.Robot;
  */
 public class Auto_Turn_To_Target extends Command {
     double x;
+    int counter;
+    
 
   
 	
@@ -18,6 +20,8 @@ public class Auto_Turn_To_Target extends Command {
     	
          requires(Robot.drive);
          requires(Robot.limelight);
+
+         counter = 0;
 
     // Called just before this Command runs the first time
        }
@@ -29,8 +33,8 @@ public class Auto_Turn_To_Target extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         x = Robot.limelight.get_Tx();
-        x = x + Robot.limelight.getOffsetRatio();
-        Robot.drive.turnRobotToAngle(x);
+        //x = x + Robot.limelight.getOffsetRatio();
+        Robot.drive.turnRobotToAngleAuto(x);
 
 
     }
@@ -51,6 +55,15 @@ public class Auto_Turn_To_Target extends Command {
 
         else{
             result = true;
+            /*
+            counter = counter + 1;
+            if (counter >= 5){
+                result = true;
+            }
+            else{
+                result = false;
+            }
+            */
         }
 
     	return result;
@@ -58,7 +71,7 @@ public class Auto_Turn_To_Target extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-        Robot.drive.driveStop();
+        Robot.drive.DriveStop();
     }
 
     // Called when another command which requires one or more of the same

@@ -48,7 +48,7 @@ public class Auto_Tank_Rotate extends Command {
     protected void execute() {
 
     	
-    	if (Math.abs(m_autorotateangle - Robot.drive.gyroGetAngle())  < 5) {
+    	if (Math.abs(m_autorotateangle - Robot.drive.gyroGetAngle())  < 10) {
     		Robot.drive.driveTank(m_leftpower /1.5, m_rightpower /1.5);
     	} else {
     		Robot.drive.driveTank(m_leftpower, m_rightpower);

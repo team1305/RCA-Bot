@@ -7,7 +7,7 @@ import frc.robot.Robot;
 /**
  *
  */
-public class Auto_Drive extends Command {
+public class Auto_Drive_Reverse extends Command {
 
 	double distance1;
 	double AnglePowerFactor;
@@ -17,9 +17,10 @@ public class Auto_Drive extends Command {
 	double angle1;
 	double power;
 	double currPos;
+	double startpos;
    
 	
-    public Auto_Drive(double angle1, double distance1, double power, double minpower, double rampup) {
+    public Auto_Drive_Reverse(double angle1, double distance1, double power, double minpower, double rampup) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	
@@ -29,8 +30,9 @@ public class Auto_Drive extends Command {
          this.angle1 = angle1;
          this.power = power;
         
-         
-         
+         //startpos = Robot.drive.getDistance();
+		 startpos = 0;
+		 
          MinSpeed = minpower; //set to just enough power to move bot
          AnglePowerFactor = .1; /// 0.1 = 10%
          RampUpDist = rampup * Robot.drive.getratio_high();;      	
@@ -57,8 +59,8 @@ public class Auto_Drive extends Command {
     	
     //	SmartDashboard.putNumber("NavX getYaw", Robot.navX.getYaw());
     	
-    	if (currPos  < RampUpDist) {  //ramp up
-    		double RampUpPercent = (currPos /RampUpDist);
+    	if (currPos  < (startpos - RampUpDist)) {  //ramp up
+    		double RampUpPercent = (currPos /(startpos - RampUpDist));
     		double SetPower = (MinSpeed + ((power - MinSpeed)  * RampUpPercent)); 
     		
     		double speedleft = SetPower + dif * AnglePowerFactor; //add or subtract power to left
@@ -77,9 +79,9 @@ public class Auto_Drive extends Command {
     			speedright = MinSpeed;
 			}
 			
-
-			Robot.drive.setRightSide(speedright);
-			Robot.drive.setLeftSide(-speedleft);
+			
+			Robot.drive.setRightSide(-speedright);
+			Robot.drive.setLeftSide(speedleft);
 			//Robot.drive.driveTank(speedleft, speedright);
 			SmartDashboard.putNumber("Ramp up distance", RampUpDist);
 			SmartDashboard.putNumber("speedleft", speedleft);
@@ -104,8 +106,8 @@ public class Auto_Drive extends Command {
 	    			speedright = MinSpeed;
 	    		}
 
-				Robot.drive.setRightSide(speedright);
-				Robot.drive.setLeftSide(-speedleft);
+				Robot.drive.setRightSide(-speedright);
+				Robot.drive.setLeftSide(speedleft);
     		//Robot.drive.driveTank(speedleft, speedright);
     		
         }
@@ -119,13 +121,10 @@ public class Auto_Drive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-		if (distance1 < 0){
-			return distance1 > currPos;
+		
+	return (startpos + distance1) < currPos;
 
-		}
-		else{
-			return distance1 < currPos;
-		}
+
     }
 
     // Called once after isFinished returns true

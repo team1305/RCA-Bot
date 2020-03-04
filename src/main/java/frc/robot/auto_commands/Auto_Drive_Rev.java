@@ -7,7 +7,7 @@ import frc.robot.Robot;
 /**
  *
  */
-public class Auto_Drive extends Command {
+public class Auto_Drive_Rev extends Command {
 
 	double distance1;
 	double AnglePowerFactor;
@@ -19,50 +19,48 @@ public class Auto_Drive extends Command {
 	double currPos;
    
 	
-    public Auto_Drive(double angle1, double distance1, double power, double minpower, double rampup) {
+    public Auto_Drive_Rev(double angle1, double distance1, double power, double minpower, double rampup ) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	
-    	 //requires(Robot.drive);
+    	 requires(Robot.drive);
          
-         this.distance1 = distance1 * Robot.drive.getratio_high(); // converts distance to encoder values
+         this.distance1 = -distance1 * Robot.drive.getratio_high(); 
          this.angle1 = angle1;
-         this.power = power;
+         this.power = -power;
         
          
          
-         MinSpeed = minpower; //set to just enough power to move bot
+         MinSpeed = -minpower; //set to just enough power to move bot
          AnglePowerFactor = .1; /// 0.1 = 10%
-         RampUpDist = rampup * Robot.drive.getratio_high();;      	
+         RampUpDist = -rampup * Robot.drive.getratio_high();      	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	currPos = -.1;
-		Robot.drive.resetEncoder();
-		//Robot.drive.LowGear();
-		SmartDashboard.putString("Staring Auto Drive", "yes");
-		SmartDashboard.putNumber("Target Auto Drive", distance1);
+    	Robot.drive.resetEncoder();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		
 
-		currPos =  Robot.drive.getDistance() ; 	
-		SmartDashboard.putNumber("currPos", currPos);
+    	currPos =  Robot.drive.getDistance() ; 	
     	
     	double dif = angle1;// - Robot.navX.getYaw();
 
+    	SmartDashboard.putNumber("Average Drive Encoder", Robot.drive.getDistance());
+    	SmartDashboard.putNumber("Right Drive Encoder", Robot.drive.getDistance_Right());
+    	SmartDashboard.putNumber("Left Drive Encoder", Robot.drive.getDistance_Left());
+
+    	//SmartDashboard.putNumber("NavX getYaw", Robot.navX.getYaw());
     	
-    //	SmartDashboard.putNumber("NavX getYaw", Robot.navX.getYaw());
-    	
-    	if (currPos  < RampUpDist) {  //ramp up
+    	if (currPos  < RampUpDist ) {  //ramp up
     		double RampUpPercent = (currPos /RampUpDist);
     		double SetPower = (MinSpeed + ((power - MinSpeed)  * RampUpPercent)); 
     		
-    		double speedleft = SetPower + dif * AnglePowerFactor; //add or subtract power to left
-    		double speedright = SetPower - dif * AnglePowerFactor; //add or subtract power to right
+    		double speedleft = SetPower - dif * AnglePowerFactor; //add or subtract power to left
+    		double speedright = SetPower + dif * AnglePowerFactor; //add or subtract power to right
     		
     		
     		if (speedleft > MinSpeed) {  //required if angle difference is large so we do not get negative speeds
@@ -75,22 +73,16 @@ public class Auto_Drive extends Command {
     			speedright = Math.min(speedright, power);
     		}else { 
     			speedright = MinSpeed;
-			}
-			
+    		}
 
-			Robot.drive.setRightSide(speedright);
-			Robot.drive.setLeftSide(-speedleft);
-			//Robot.drive.driveTank(speedleft, speedright);
-			SmartDashboard.putNumber("Ramp up distance", RampUpDist);
-			SmartDashboard.putNumber("speedleft", speedleft);
-			SmartDashboard.putNumber("speedright", speedright);
+    		Robot.drive.driveTank(speedleft, speedright);
     		
     		
     	} else { 	// Loop for Distance 1
     		double SetPower = power;
     		
-    		double speedleft = SetPower + dif * AnglePowerFactor; //add or subtract power to left
-    		double speedright = SetPower - dif * AnglePowerFactor; //add or subtract power to right
+    		double speedleft = SetPower - dif * AnglePowerFactor; //add or subtract power to left
+    		double speedright = SetPower + dif * AnglePowerFactor; //add or subtract power to right
     		
 	    		if (speedleft > MinSpeed) {  //required if angle difference is large so we do not get negative speeds
 	    			speedleft = Math.min(speedleft, power);
@@ -104,33 +96,25 @@ public class Auto_Drive extends Command {
 	    			speedright = MinSpeed;
 	    		}
 
-				Robot.drive.setRightSide(speedright);
-				Robot.drive.setLeftSide(-speedleft);
-    		//Robot.drive.driveTank(speedleft, speedright);
+    		Robot.drive.driveTank(speedleft, speedright);
     		
         }
     	
 //    	SmartDashboard.putNumber("currAngle", Robot.drive.gyroGetAngle());
 //    	SmartDashboard.putNumber("currPos", Robot.drive.getDistance());
 //    	SmartDashboard.putNumber("SetDistance", distance);  
-       //	SmartDashboard.putNumber("NavX getYaw", Robot.navX.getYaw());
+      // 	SmartDashboard.putNumber("NavX getYaw", Robot.navX.getYaw());
     	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-		if (distance1 < 0){
-			return distance1 > currPos;
-
-		}
-		else{
-			return distance1 < currPos;
-		}
+    	return Math.abs(distance1) < Math.abs(currPos);
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.drive.DriveStop();
+    	//Robot.drive.driveStop();
     }
 
     // Called when another command which requires one or more of the same
