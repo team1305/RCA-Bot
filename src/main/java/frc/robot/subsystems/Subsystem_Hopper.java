@@ -10,8 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -46,7 +44,6 @@ public class Subsystem_Hopper extends Subsystem {
   }
 
   public void hopperOut(double speed) {
-
     mtHopper.set(ControlMode.PercentOutput, -speed);
   }
 
