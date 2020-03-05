@@ -14,6 +14,7 @@ import frc.robot.commands.Command_Compressor_OFF;
 import frc.robot.commands.Command_Compressor_ON;
 import frc.robot.commands.Command_Hood_Down;
 import frc.robot.commands.Command_Hood_Up;
+import frc.robot.commands.Command_Hook_Toggle;
 import frc.robot.commands.Command_Intake_Ground;
 import frc.robot.commands.Command_Intake_Station;
 import frc.robot.commands.Command_Puke;
@@ -77,7 +78,7 @@ public class OI {
 
     btn1_B.whileHeld(new Command_Winch_Down());//xbox "B" Button 2
 
-    btn1_X.whileHeld(new Command_Set_LED_Green());// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
+    btn1_X.whenPressed(new Command_Hook_Toggle());// xbox "X" Button 3, turn to false when we don't want to use smartDashboard
 
     btn1_Y.whileHeld(new Command_Intake_Ground());//xbox "Y" Button 4
 
