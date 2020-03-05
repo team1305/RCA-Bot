@@ -152,6 +152,10 @@ public class Command_ai_loop extends Command {
      //Vision tracking code, activates when right bumper is pressed
      if (Robot.oi.getJoystickDriver().getRawButton(6)) { // Driver RB
 
+      if (Robot.limelight.isLimelightOn() == false){
+        Robot.limelight.limelightOn();
+      }
+
        //Limelight turn to target
        switch (cstate) {  
        case "HUNT" : 
@@ -166,7 +170,7 @@ public class Command_ai_loop extends Command {
          //x = x + Robot.limelight.getOffsetRatio();
          SmartDashboard.putNumber("x ai loop", x);
          
-         Robot.limelight.turnRobotToAngle(x);
+         Robot.drive.turnRobotToAngle(x);
 
          if (Math.abs(x) <= 1){
           // Calc Distance away so we know zone 1 or zone 2
@@ -331,6 +335,7 @@ public class Command_ai_loop extends Command {
            Robot.drive.HighGear();
 
            Robot.led.setBlack();
+           Robot.limelight.limelightOff();
 
            cstate = "HUNT";
            izone = 1;
@@ -340,6 +345,9 @@ public class Command_ai_loop extends Command {
            cstate = "HUNT";
            izone = 1;
            irpm = 0;
+           if (Robot.limelight.isLimelightOn()){
+            Robot.limelight.limelightOff();
+           }
         }
 
      }

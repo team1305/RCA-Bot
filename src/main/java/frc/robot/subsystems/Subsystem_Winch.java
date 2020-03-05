@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -27,6 +27,9 @@ public class Subsystem_Winch extends Subsystem {
   
   private final WPI_TalonFX mtWinch1 = RobotMap.mtWinch1;
   private final WPI_TalonFX mtWinch2 = RobotMap.mtWinch2;
+  private final Solenoid slHook = RobotMap.slndHook;
+
+  private boolean isHookUp;
 
 
 
@@ -53,6 +56,8 @@ public class Subsystem_Winch extends Subsystem {
 
     mtWinch2.follow(mtWinch1);
 
+    isHookUp = false;
+
 
 
   }
@@ -76,6 +81,27 @@ public class Subsystem_Winch extends Subsystem {
     mtWinch1.set(0);
     mtWinch2.set(0);
   }
+
+  public void hookUp(){
+    isHookUp = true;
+    slHook.set(true);
+  }
+
+  public void hookDown(){
+    isHookUp=false;
+    slHook.set(false);
+  }
+
+  public void hookToggle(){
+    if (isHookUp){
+      hookDown();
+    }
+    else{
+      hookUp();
+    }
+  }
+
+  
 
 }
 

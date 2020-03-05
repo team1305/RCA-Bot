@@ -334,7 +334,7 @@ public class Subsystem_Drive extends Subsystem {
     SmartDashboard.putBoolean("Gear", bIsLow);
   }
 
-  public void turnRobotToAngle(double x) {
+  public void turnRobotToAngle(double x){
 
     if (Robot.limelight.is_Target()) {
       double left_command;
@@ -345,13 +345,18 @@ public class Subsystem_Drive extends Subsystem {
 
       double heading_error = -x;
       double steering_adjust = 0.0f;
-      if (x > 1) {
-        steering_adjust = Kp * heading_error + Kf;
-      } else if (x < -1) {
-        steering_adjust = Kp * heading_error - Kf;
-      } else {
-        steering_adjust = 0;
-      }
+           if (x > 1)
+           {
+                   steering_adjust = Kp*heading_error + Kf;
+           }
+           else if (x < -1)
+           {
+                   steering_adjust = Kp*heading_error - Kf;
+           }
+           else{
+             steering_adjust = 0;
+           }
+
 
       left_command += steering_adjust;
       right_command -= steering_adjust;
@@ -361,11 +366,12 @@ public class Subsystem_Drive extends Subsystem {
       SmartDashboard.putNumber("Steering Adjust", steering_adjust);
       SmartDashboard.putNumber("X", x);
 
-      if (left_command > 0.75) {
+
+      if (left_command > 0.75){
         left_command = 0.75;
       }
 
-      if (right_command > 0.75) {
+      if (right_command > 0.75){
         right_command = 0.75;
       }
 

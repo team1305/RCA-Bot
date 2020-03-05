@@ -135,9 +135,24 @@ public class Subsystem_Limelight extends Subsystem {
   }
 
   public void limelightOff(){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
+  public void limelightOn(){
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+  }
+
+  public boolean isLimelightOn(){
+    int isOn = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getNumber(1).intValue();
+    if (isOn == 3){
+      return true;
+    } 
+    else{
+      return false;
+    }
+  }
+
+  /*
   public void turnRobotToAngle(double x){
 
     if (Robot.limelight.is_Target()) {
@@ -183,6 +198,7 @@ public class Subsystem_Limelight extends Subsystem {
       Robot.drive.setRightSide(right_command);
     }
   }
+  */
 
 
 

@@ -39,7 +39,18 @@ public class AutoCommands extends CommandGroup {
             //addSequential(new Auto_Reset_Encoders());
 
             addSequential(new Auto_Reset_Encoders());
+            addSequential(new Auto_Tank_Rotate_Master(-45, 0.2, 0.2, 5));
+            addSequential(new Auto_Drive_Master(-45, -24, 0.2, 0.2, 5, 5));
+            addSequential(new Auto_Tank_Rotate_Master(0, 0.2, 0.2, 5));
+            addSequential(new Auto_Drive_Master(0, -24, 0.2, 0.2, 5, 5));
+            //addSequential(new Auto_Drive_Master(-90, -36, 0.2, 0.2, 5, 5));
+            //addSequential(new Auto_Drive_Master(0, 24, 0.2, 0.2, 5, 5));
+            //addSequential(new Auto_Drive_Master(0, -24, 0.2, 0.2, 5, 5));
+/*
+            addSequential(new Auto_Reset_Encoders());
             addSequential(new Auto_Drive_Master(0, 72, 0.3, 0.2, 10, 10));
+
+
             addSequential(new Auto_Tank_Rotate_Master(180, 0.3, 0.3, 5));
             addSequential(new Auto_Reset_Encoders());
             addSequential(new Auto_Drive_Master(0, 72, 0.3, 0.2, 10, 10));
@@ -51,7 +62,7 @@ public class AutoCommands extends CommandGroup {
             //addSequential(new Auto_Tank_Rotate_Master(0, 0.3, 0.3, 5));
 
             //addSequential(new Auto_Drive_Master(0, -72, 0.3, 0.2, 10, 10)); // Angle, Distance, Power, Min Power, Ramp Up, Ramp Down
-
+*/
             addSequential(new Auto_Finished());
 
             //addSequential (new Auto_Drive_Gyro(0, 20, .5, .3, 1));

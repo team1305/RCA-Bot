@@ -12,9 +12,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.auto_commands.AutoDrivePID;
+//import frc.robot.auto_commands.AutoDrivePID;
 import frc.robot.commands.AutoCommands;
 import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_Drive;
@@ -65,7 +66,7 @@ public class Robot extends TimedRobot {
 
   private int caseMove = 0;
 
-  private AutoDrivePID autodrive = new AutoDrivePID(100000, Robot.drive);
+  //private AutoDrivePID autodrive = new AutoDrivePID(100000, Robot.drive);
 
   
 
@@ -162,6 +163,7 @@ public class Robot extends TimedRobot {
     Robot.intake.stopIntake();
     Robot.drive.setRightSide(0);
     Robot.drive.setLeftSide(0);
+    Robot.limelight.limelightOff();
   }
 
   //This function is called periodically during operator control

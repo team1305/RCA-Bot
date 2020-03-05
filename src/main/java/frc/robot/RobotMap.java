@@ -103,9 +103,19 @@ public class RobotMap {
   //declares port number of solenoid
   public static Solenoid slndGearShifter = new Solenoid(0);
 
+  public static Solenoid slndHook =  new Solenoid(6);
+
+  // 2 is empty
+
+  // 3 is empty
+
   public static Solenoid slndIntake =  new Solenoid(4);
 
   public static Solenoid slndHood =  new Solenoid(5);
+
+  // 6 is empty
+
+  //7 is vent
 
 
 

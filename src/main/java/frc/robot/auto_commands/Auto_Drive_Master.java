@@ -19,7 +19,6 @@ public class Auto_Drive_Master extends Command {
 	double currPos;
 	double startPos;
 	double target;
-	double direction;
 
 	double dif;
 
@@ -40,11 +39,6 @@ public class Auto_Drive_Master extends Command {
 		this.distance1 = distance1 * Robot.drive.getratio_high(); // converts distance to encoder values
 		this.angle1 = angle1;
 		this.power = power;
-		if (distance1 < 0) {
-			direction = 1;
-		} else {
-			direction = -1;
-		}
 
 		MinSpeed = minpower; // set to just enough power to move bot
 		AnglePowerFactor = .1; /// 0.1 = 10%
@@ -56,14 +50,15 @@ public class Auto_Drive_Master extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		currPos = -.1;
-		Robot.drive.resetEncoder();
+		//Robot.drive.resetEncoder();
 		startPos = Robot.drive.getDistance();
 
 		target = startPos + distance1;
 
 		// Robot.drive.LowGear();
-		SmartDashboard.putString("Staring Auto Drive", "yes");
-		SmartDashboard.putNumber("Target Auto Drive", distance1);
+		SmartDashboard.putString("Starting Auto Drive", "yes");
+		SmartDashboard.putNumber("Auto Drive Start", startPos);
+		SmartDashboard.putNumber("Target Auto Drive", target);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
@@ -74,14 +69,14 @@ public class Auto_Drive_Master extends Command {
 		if (target > startPos) { // go forward
 
 			if (currPos <= (startPos + RampUpDist)) {
-				dif = angle1;// - Robot.navX.getYaw();
-				dif = 0;
+				dif = angle1 - Robot.drive.gyroGetAngle();
+				//dif = 0;
 
 				RampUpPercent = (currPos / (startPos + RampUpDist));
 				SetPower = (MinSpeed + ((power - MinSpeed) * RampUpPercent));
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -96,14 +91,14 @@ public class Auto_Drive_Master extends Command {
 				} // end of ramp up
 
 			} else if (currPos >= (target - RampDownDist)) {
-				dif = angle1;// - Robot.navX.getYaw();
-				dif = 0;
+				dif = angle1 - Robot.drive.gyroGetAngle();
+				//dif = 0;
 
 				RampUpPercent = (currPos / (target - RampDownDist));
 				SetPower = (MinSpeed + ((power - MinSpeed) * RampUpPercent));
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -120,10 +115,11 @@ public class Auto_Drive_Master extends Command {
 			} else {
 				// drive full speed * direction;
 				SetPower = power;
-				dif = 0;
+				dif = angle1 - Robot.drive.gyroGetAngle();
+				//dif = 0;
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -145,14 +141,14 @@ public class Auto_Drive_Master extends Command {
 
 		} else { // go backwards
 			if ((currPos <= startPos) && (currPos >= (startPos - RampUpDist))) {
-				dif = angle1;// - Robot.navX.getYaw();
-				dif = 0;
+				dif = angle1 + Robot.drive.gyroGetAngle();
+				//dif = 0;
 
 				RampUpPercent = (currPos / (startPos - RampUpDist));
 				SetPower = (MinSpeed + ((power - MinSpeed) * RampUpPercent));
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -168,14 +164,14 @@ public class Auto_Drive_Master extends Command {
 
 
 			} else if (currPos <= (target + RampDownDist)) {
-				dif = angle1;// - Robot.navX.getYaw();
-				dif = 0;
+				dif = angle1 +  Robot.drive.gyroGetAngle();
+				//dif = 0;
 
 				RampUpPercent = (currPos / (target + RampDownDist));
 				SetPower = (MinSpeed + ((power - MinSpeed) * RampUpPercent));
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -193,10 +189,11 @@ public class Auto_Drive_Master extends Command {
 			} else {
 				// drive full speed * direction;
 				SetPower = power;
-				dif = 0;
+				dif = angle1 +  Robot.drive.gyroGetAngle();
+				//dif = 0;
 
-				speedleft = SetPower; // + dif * AnglePowerFactor; // add or subtract power to left
-				speedright = SetPower; // - dif * AnglePowerFactor; // add or subtract power to right
+				speedleft = SetPower + (dif * AnglePowerFactor); // add or subtract power to left
+				speedright = SetPower - (dif * AnglePowerFactor); // add or subtract power to right
 
 				if (speedleft > MinSpeed) { // required if angle difference is large so we do not get negative speeds
 					speedleft = Math.min(speedleft, power);
@@ -290,7 +287,7 @@ public class Auto_Drive_Master extends Command {
 		SmartDashboard.putNumber("target", target);
 
 
-		if (target > startPos) { // going forward
+		if (target >= startPos) { // going forward
 			return (currPos >= target);
 
 		} else {
