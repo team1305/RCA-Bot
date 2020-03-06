@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -21,6 +22,10 @@ public class Subsystem_Hopper extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   public static WPI_TalonFX mtHopper = RobotMap.mtHopper;
+  private static DigitalInput ballCounter = RobotMap.ballCounter;
+
+  private int payload = 0;
+  private boolean lastState = false;
 
   public Subsystem_Hopper() {
 
@@ -49,5 +54,28 @@ public class Subsystem_Hopper extends Subsystem {
 
   public void hopperStop() {
     mtHopper.set(ControlMode.PercentOutput, 0);
+  }
+
+  public void countBalls(boolean isloading){
+    boolean sensorState = ballCounter.get();
+    if(isloading == true){
+      if(sensorState == false && lastState == true){
+        payload++;
+        lastState = sensorState;
+      }else{
+        lastState = sensorState;
+      }
+    }else{
+      if(sensorState == false && lastState == true){
+        payload--;
+        lastState = sensorState;
+      }else{
+        lastState = sensorState;
+      }
+    }
+  }
+
+  public int getCount(){
+    return payload;
   }
 }
