@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 //import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 
@@ -90,6 +91,9 @@ public class RobotMap {
   public static CANEncoder enWinch1 = new CANEncoder(mtWinch1);
   public static CANEncoder enTowerLift = new CANEncoder(mtTowerLift);
   */
+
+  // DIO 
+  public static final DigitalInput ballCounter = new DigitalInput(1);
 
   //declares CANifier for LED control
   //public static CANifier RGBLEDController = new CANifier(20);
