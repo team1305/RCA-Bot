@@ -93,7 +93,8 @@ public class RobotMap {
   */
 
   // DIO 
-  public static final DigitalInput ballCounter = new DigitalInput(1);
+  public static final DigitalInput ballInSensor = new DigitalInput(1);
+  public static final DigitalInput ballMaxSensor = new DigitalInput(2);
 
   //declares CANifier for LED control
   //public static CANifier RGBLEDController = new CANifier(20);

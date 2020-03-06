@@ -22,10 +22,8 @@ public class Subsystem_Hopper extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   public static WPI_TalonFX mtHopper = RobotMap.mtHopper;
-  private static DigitalInput ballCounter = RobotMap.ballCounter;
-
-  private int payload = 0;
-  private boolean lastState = false;
+  private static DigitalInput ballIn = RobotMap.ballInSensor;
+  private static DigitalInput ballMax = RobotMap.ballMaxSensor;
 
   public Subsystem_Hopper() {
 
@@ -56,26 +54,8 @@ public class Subsystem_Hopper extends Subsystem {
     mtHopper.set(ControlMode.PercentOutput, 0);
   }
 
-  public void countBalls(boolean isloading){
-    boolean sensorState = ballCounter.get();
-    if(isloading == true){
-      if(sensorState == false && lastState == true){
-        payload++;
-        lastState = sensorState;
-      }else{
-        lastState = sensorState;
-      }
-    }else{
-      if(sensorState == false && lastState == true){
-        payload--;
-        lastState = sensorState;
-      }else{
-        lastState = sensorState;
-      }
-    }
+  public boolean isFull(){
+    return ballIn.get() && ballMax.get();
   }
 
-  public int getCount(){
-    return payload;
-  }
 }
