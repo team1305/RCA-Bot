@@ -119,6 +119,22 @@ public class Subsystem_Drive extends Subsystem {
     // SmartDashboard.putNumber("dThrottleFactor", dThrottleFactor);
   }
 
+  public double getRightSide1RPM(){
+    return mtRight1.getSelectedSensorVelocity() / RobotMap.TICKS_PER_ROTATION * 10.0 * 60.0;
+  }
+
+  public double getRightSide2RPM(){
+    return mtRight2.getSelectedSensorVelocity() / RobotMap.TICKS_PER_ROTATION * 10.0 * 60.0;
+  }
+
+  public double getLeftSide1RPM(){
+    return mtLeft1.getSelectedSensorVelocity() / RobotMap.TICKS_PER_ROTATION * 10.0 * 60.0;
+  }
+
+  public double getLeftSide2RPM(){
+    return mtLeft2.getSelectedSensorVelocity() / RobotMap.TICKS_PER_ROTATION * 10.0 * 60.0;
+  }
+
   public double getratio_low() {
     // Convert encoder ticks to 1 inch
     double encoder_ticks = 2048;  // TODO: move these to class constents as they get reused in several locations

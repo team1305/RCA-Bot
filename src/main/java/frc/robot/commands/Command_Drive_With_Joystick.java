@@ -29,9 +29,12 @@ public class Command_Drive_With_Joystick extends Command {
     //SmartDashboard.putString("executing", "Executing");
     Robot.drive.driveWithJoystick(Robot.oi.getJoystickDriver());
     SmartDashboard.putNumber("Gyro Angle", Robot.drive.gyroGetAngle());
-    //SmartDashboard.putNumber("RIGHT SIDE SPEED TESTING", Robot.drive.getRightSide());
-    //SmartDashboard.putNumber("LEFT SIDE SPEED TESTING", Robot.drive.getLeftSide());
-    SmartDashboard.putNumber("TESTING", Robot.drive.gyroGetAngle());
+    SmartDashboard.putNumber("RIGHT SIDE RPM 1 TESTING", Robot.drive.getRightSide1RPM());
+    SmartDashboard.putNumber("LEFT SIDE RPM 1 TESTING", Robot.drive.getLeftSide1RPM());
+    SmartDashboard.putNumber("RIGHT SIDE RPM 2 TESTING", Robot.drive.getRightSide2RPM());
+    SmartDashboard.putNumber("LEFT SIDE RPM 2 TESTING", Robot.drive.getLeftSide2RPM());
+    //SmartDashboard.putNumber("TESTING", Robot.drive.gyroGetAngle());
+
 
   }
 
