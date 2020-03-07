@@ -23,6 +23,7 @@ public class Auto_Turn_To_Target_Master extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		Robot.drive.LowGear();
+		Robot.limelight.limelightOn();
 		isuccess = 0;
 
 	}
@@ -45,7 +46,7 @@ public class Auto_Turn_To_Target_Master extends Command {
 			isuccess = isuccess + 1;
 
 
-			if (isuccess >= 5) {
+			if (isuccess >= 4) {//5
 				return true;
 
 			} else {
@@ -62,6 +63,7 @@ public class Auto_Turn_To_Target_Master extends Command {
 	// Called once after isFinished returns true
 	protected void end() {
 		Robot.drive.DriveStop();
+		Robot.drive.HighGear();
 	}
 
 	// Called when another command which requires one or more of the same

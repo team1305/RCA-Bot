@@ -41,7 +41,7 @@ public class Auto_Drive_Master extends Command {
 		this.power = power;
 
 		MinSpeed = minpower; // set to just enough power to move bot
-		AnglePowerFactor = .1; /// 0.1 = 10%
+		AnglePowerFactor = .05; /// 0.1 = 10%
 		RampUpDist = rampup * Robot.drive.getratio_high();
 		RampDownDist = rampdown * Robot.drive.getratio_high();
 		

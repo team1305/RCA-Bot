@@ -28,7 +28,7 @@ public class Auto_Intake_On extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        Robot.intake.enableIntake(0.5);
+        Robot.intake.enableIntake(0.9);
         Robot.hopper.hopperIn(0.9);
 	
     }

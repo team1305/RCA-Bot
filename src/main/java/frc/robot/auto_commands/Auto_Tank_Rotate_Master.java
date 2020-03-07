@@ -94,6 +94,7 @@ public class Auto_Tank_Rotate_Master extends Command {
     // Called once after isFinished returns true
     protected void end() {
         Robot.drive.DriveStop();
+        Robot.drive.HighGear();
         //Robot.drive.setLeftSide(0);
         //Robot.drive.setRightSide(0);
        // Robot.drive.driveshighgear();

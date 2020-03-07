@@ -295,7 +295,11 @@ public class Command_ai_loop extends Command {
             Robot.shooter.setShooterPIDTrench();
           }
 
-
+          else if ((distance > 500) && (distance <= 600)){//259, 450
+            irpm = 5750;
+            Robot.shooter.hoodDown();
+            Robot.shooter.setShooterPIDTrench();
+          }
 
            else{
              irpm = 6000;

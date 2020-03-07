@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -84,29 +85,34 @@ public class Robot extends TimedRobot {
 
     //resets the encoder on initialize
     //Robot.tower.resetEncoder();
+    
     oi = new OI();
 
     //starts camera stream if camera is available
-    /*try {
+    try {
 
       camera = CameraServer.getInstance().startAutomaticCapture();
     }
     catch(Exception ex) {
 
       System.out.println("ERROR: setting camera: " + ex.getMessage()) ;
-    } */
+    } 
 
 
     
     autonomousModes = new SendableChooser<CommandGroup>();
-    autonomousModes.setDefaultOption("6 ball auto, straight lined up, our trench", new AutoCommands(1));
-    autonomousModes.addOption("8 ball auto, straight lined up, our trench", new AutoCommands(2));
+    autonomousModes.setDefaultOption("6 ball auto, straight lined up to our trench", new AutoCommands(1));
+    autonomousModes.addOption("6 ball auto, straight lined up to target, our trench", new AutoCommands(2));
     autonomousModes.addOption("8 ball auto, opposite side steal, then generator", new AutoCommands(3));
+    autonomousModes.addOption("3 ball auto, cross line then shoot", new AutoCommands(4));
+   
 
     SmartDashboard.putData("AUTO Modes", autonomousModes);
     Robot.drive.HighGear();
     Robot.drive.resetEncoder();
     Robot.drive.gyroReset();
+
+    Robot.limelight.limelightOn();
 
 
 
@@ -135,6 +141,7 @@ public class Robot extends TimedRobot {
     Robot.drive.resetEncoder();
 
 
+
     	autonomousCommand = (Command) autonomousModes.getSelected();
     	if (autonomousCommand != null) autonomousCommand.start();
    //   Robot.drive.gyroReset();
@@ -156,6 +163,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 
     if (autonomousCommand != null) autonomousCommand.cancel();
+    Robot.intake.retractIntake();
 
     Robot.shooter.setShooterSpeed(0);
     Robot.elevator.elevatorStop();
@@ -163,7 +171,7 @@ public class Robot extends TimedRobot {
     Robot.intake.stopIntake();
     Robot.drive.setRightSide(0);
     Robot.drive.setLeftSide(0);
-    Robot.limelight.limelightOff();
+    //Robot.limelight.limelightOff();
   }
 
   //This function is called periodically during operator control
@@ -174,6 +182,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     //winch.UpdateLimitSwitch();
     //Robot.led.setOcean();
+
   }
 
   //This function is called periodically during test mode

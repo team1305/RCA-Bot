@@ -135,7 +135,7 @@ public class Subsystem_Limelight extends Subsystem {
   }
 
   public void limelightOff(){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    //NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
   public void limelightOn(){
